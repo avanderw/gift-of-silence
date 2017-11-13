@@ -1,19 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gift.of.silence.intel;
 
-/**
- *
- * @author Andrew
- */
+import com.sun.javafx.geom.Vec3d;
+import gift.of.silence.event.EventManager;
+
 public class Intel {
 
-    public void dropSensor() {}
-    public void toggleTelescope() {}
-    public void toggleRadar(){}
-    public void toggleSonar(){}
-    public void toggleActive(){}
+    public EventManager events;
+    public Vec3d position;
+
+    public Intel() {
+        events = new EventManager();
+    }
+
+    public void dropSensor() {
+    }
+
+    public void toggleTelescope() {
+    }
+
+    public void toggleRadar() {
+    }
+
+    public void toggleSonar() {
+    }
+
+    public void toggleActive() {
+    }
 }
