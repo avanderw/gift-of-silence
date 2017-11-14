@@ -8,6 +8,7 @@ public class Simulator implements Runnable {
 
     private volatile Thread thread;
     private volatile List<ISimulated> systems;
+    private final long fps = 1;
 
     public Simulator(List<ISimulated> systems) {
         this.systems = systems;
@@ -24,7 +25,7 @@ public class Simulator implements Runnable {
 
     @Override
     public void run() {
-        long refreshRate = 1000l / 30;
+        long refreshRate = 1000 / fps;
         while (thread == Thread.currentThread()) {
             long start = System.currentTimeMillis();
             long next = start + refreshRate;
