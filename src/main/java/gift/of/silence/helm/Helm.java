@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.sun.javafx.geom.Vec3d;
 import gift.of.silence.event.EventManager;
 import gift.of.silence.simulator.ISimulated;
+import java.util.logging.Logger;
 
 /**
  *
