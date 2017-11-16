@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gift.of.silence.simulator;
+package gift.of.silence.core;
 
 /**
  *
  * @author CP318674
  */
-public interface ISimulated {
-
-    void simulate(long refreshRate);
-    
+public interface IConnectedSystem {
+    String onMessage(String message);
 }

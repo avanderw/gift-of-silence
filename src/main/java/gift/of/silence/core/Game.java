@@ -1,25 +1,32 @@
-package gift.of.silence.simulator;
+package gift.of.silence.core;
 
+import gift.of.silence.helm.Helm;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
-public class Simulator implements Runnable {
 
+public class Game implements Runnable {
+    
     private volatile Thread thread;
-    private volatile List<ISimulated> systems;
+    private volatile List<ISimulatedSystem> systems = new ArrayList();
+    
     private final long fps = 1;
 
-    public Simulator(List<ISimulated> systems) {
-        this.systems = systems;
+    void simulate(ISimulatedSystem system) {
+        systems.add(system);
     }
 
-    public void start() {
+    void remove(ISimulatedSystem system) {
+        systems.remove(system);
+    }
+    
+    void start() {
         thread = new Thread(this);
         thread.start();
     }
 
-    public void stop() {
+    void stop() {
         thread = null;
     }
 
@@ -36,15 +43,14 @@ public class Simulator implements Runnable {
             
             long end = System.currentTimeMillis();
             if (next < end) {
-                Logger.getLogger(this.getClass().getName()).warning("simulation taking longer than refresh rate");
+                System.out.println("core: simulation taking longer than refresh rate");
             }
 
             try {
                 TimeUnit.MILLISECONDS.sleep(next - end);
             } catch (InterruptedException ex) {
-                Logger.getLogger(this.getClass().getName()).warning("simulation thread interrupted");
+                System.out.println("core: thread interrupted");
             }
         }
     }
-
 }

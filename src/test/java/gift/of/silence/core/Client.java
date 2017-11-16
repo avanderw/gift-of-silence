@@ -14,12 +14,14 @@ import java.util.logging.Logger;
 public class Client {
 
     public static void main(String[] args) {
+        System.out.println("client running");
         BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
         try (DatagramSocket socket = new DatagramSocket()) {
+            socket.setSoTimeout(256);
             InetAddress ipAddress = InetAddress.getByName("localhost");
-            
+
             String request = null;
-            while (request == null || !request.equals("exit")) {
+            while (request == null || !request.equals("disconnect")) {
                 try {
                     request = console.readLine();
                     byte[] sendData = request.getBytes();
@@ -28,9 +30,9 @@ public class Client {
                     DatagramPacket receivePacket = new DatagramPacket(new byte[508], 508);
                     socket.receive(receivePacket);
                     String response = new String(receivePacket.getData());
-                    Logger.getLogger(Client.class.getName()).log(Level.INFO, "response: {0}", response);
+                    System.out.println(String.format("<- %s", new Object[]{response}));
                 } catch (IOException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println(String.format("?- %s", new Object[]{ex.getMessage()}));
                 }
             }
         } catch (SocketException | UnknownHostException ex) {

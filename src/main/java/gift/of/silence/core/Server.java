@@ -5,12 +5,17 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server implements Runnable {
 
     private volatile Thread thread;
+
+    private final Map<InetAddress, IConnectedSystem> connected = new HashMap();
+    private final Game game = new Game();
 
     public void start() {
         thread = new Thread(this);
@@ -30,6 +35,7 @@ public class Server implements Runnable {
             throw new RuntimeException(ex);
         }
 
+        System.out.println("server started");
         while (thread == Thread.currentThread()) {
             DatagramPacket receivePacket = new DatagramPacket(new byte[508], 508);
             try {
@@ -40,23 +46,52 @@ public class Server implements Runnable {
             }
             InetAddress ipAddress = receivePacket.getAddress();
             int port = receivePacket.getPort();
+            String message = new String(receivePacket.getData());
+            message = message.trim();
 
-            String request = new String(receivePacket.getData());
-            request = request.trim();
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "received:: {0} lies mother fucker", request);
+            byte[] sendData = null;
+            DatagramPacket sendPacket = null;
+            if (connected.containsKey(ipAddress)) {
+                System.out.println(String.format("->%s:%d %s", new Object[]{ipAddress, port, message}));
 
-            if (request.equals("exit")) {
-                this.stop();
-                System.out.println("stopping");
+                switch (message) {
+                    case "play":
+                        game.start();
+                        sendData = "game playing".getBytes();
+                        break;
+                    case "pause":
+                        game.stop();
+                        sendData = "game pausing".getBytes();
+                        break;
+                    case "disconnect":
+                        connected.remove(ipAddress);
+                        game.remove(SubSystem.HELM);
+                        sendData = "disconnecting".getBytes();
+                        break;
+                    default:
+                        sendData = connected.get(ipAddress).onMessage(message).getBytes();
+                }
+            } else {
+                System.out.println(String.format("o-%s:%d %s", new Object[]{ipAddress, port, message}));
+                switch (message) {
+                    case "helm":
+                        connected.put(ipAddress, SubSystem.HELM);
+                        game.simulate(SubSystem.HELM);
+                        sendData = "helm registered".getBytes();
+                        break;
+                    default:
+                        sendData = "role?".getBytes();
+                }
             }
 
-            byte[] sendData = request.toUpperCase().getBytes();
-            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, port);
+            System.out.println(String.format("<-%s:%d %s", new Object[]{ipAddress, port, new String(sendData)}));
+            sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, port);
             try {
                 socket.send(sendPacket);
             } catch (IOException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        System.out.println("server closed");
     }
 }
