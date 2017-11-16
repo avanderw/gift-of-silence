@@ -12,7 +12,7 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
 
     public transient double turnRate;
     public Vec3d position = new Vec3d();
-    public transient Vec3d velocity = new Vec3d(1, 0, 0); // m/s
+    public transient Vec3d velocity = new Vec3d(); // m/s
     public transient Vec3d acceleration = new Vec3d(); // m/s
 
     public transient double maxTurnRate;
@@ -34,11 +34,12 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
     }
 
     public void heading(double heading) {
+        
         System.out.println("helm: heading set to " + heading);
     }
 
-    public void speed(double speed) {
-        System.out.println("helm: speed set to " + speed);
+    public void speed(double scale) {
+        System.out.println("helm: speed set to " + scale);
     }
 
     public void depth(double depth) {
