@@ -19,14 +19,14 @@ public class Vector2D {
                     Vector2D that = (Vector2D) args[0];
                     this.x = that.x;
                     this.y = that.y;
+                    break;
                 }
-                break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    x = (Double) args[0];
-                    y = (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    x = ((Number) args[0]).doubleValue();
+                    y = ((Number) args[1]).doubleValue();
+                    break;
                 }
-                break;
             default:
                 throw new RuntimeException();
         }
@@ -325,6 +325,13 @@ public class Vector2D {
             default:
                 throw new RuntimeException();
         }
+
+        if (angle > Math.PI) {
+            angle -= 2 * Math.PI;
+        } else if (angle < -Math.PI) {
+            angle += 2 * Math.PI;
+        }
+        
         return angle;
     }
 
@@ -445,18 +452,18 @@ public class Vector2D {
         y += radius + Math.sin(angle);
         return this;
     }
-    
+
     @Override
     public Vector2D clone() {
         return new Vector2D(this);
     }
-    
+
     public static void swap(Vector2D a, Vector2D b) {
         final Vector2D tmp = a.clone();
         a.set(b);
         b.set(tmp);
     }
-    
+
     @Override
     public String toString() {
         return "[" + x + "," + y + "]";
