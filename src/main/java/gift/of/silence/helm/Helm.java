@@ -1,25 +1,17 @@
 package gift.of.silence.helm;
 
-import com.google.gson.Gson;
-import com.sun.javafx.geom.Vec3d;
 import gift.of.silence.event.EventManager;
 import gift.of.silence.core.IConnectedSystem;
 import gift.of.silence.core.ISimulatedSystem;
+import gift.of.silence.core.Vector2D;
 
 public class Helm implements ISimulatedSystem, IConnectedSystem {
 
     public transient EventManager events = new EventManager();
 
-    public transient double turnRate;
-    public Vec3d position = new Vec3d();
-    public transient Vec3d velocity = new Vec3d(); // m/s
-    public transient Vec3d acceleration = new Vec3d(); // m/s
-
-    public transient double maxTurnRate;
-    public transient Vec3d maxAcceleration = new Vec3d();
-    public transient Vec3d maxVelocity = new Vec3d();
-
-    public transient Depth depth = new Depth();
+    Vector2D position = new Vector2D();
+    Double maxRotation = 2 * Math.PI / 180; // rad/s
+    Double maxAcceleration = 1D; // m/s
 
     public class Depth {
 
@@ -29,20 +21,29 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
         public double crush;
     }
 
-    public Helm() {
+    Double targetHeading = 0D;
+    Double currentHeading = 0D;
 
+    public void heading(Double heading) {
+        targetHeading = heading / 180 * Math.PI;
+        System.out.println(String.format("helm: heading set to %s (%s)", heading, targetHeading));
     }
 
-    public void heading(double heading) {
-        
-        System.out.println("helm: heading set to " + heading);
-    }
+    Double maxSpeed = 10D;
+    Double targetSpeed = 0D;
+    Double currentSpeed = 0D;
 
     public void speed(double scale) {
-        System.out.println("helm: speed set to " + scale);
+        targetSpeed = maxSpeed * scale;
+        System.out.println("helm: speed set to " + targetSpeed);
     }
 
+    Double maxDepth = 100D;
+    Double targetDepth = 0D;
+    Double currentDepth = 0D;
+
     public void depth(double depth) {
+        targetDepth = depth;
         System.out.println("helm: depth set to " + depth);
     }
 
@@ -68,20 +69,34 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
 
     @Override
     public void simulate(long delta) {
-        Vec3d deltaAcceleration = new Vec3d(acceleration);
-        deltaAcceleration.mul(acceleration.length() / 1000 * delta);
+        Vector2D currentVelocity = new Vector2D();
+        currentVelocity.offsetPolar(currentSpeed, currentHeading);
+        System.out.println(String.format("helm: current velocity %s", currentVelocity));
 
-        Vec3d deltaVelocity = new Vec3d(velocity);
-        deltaVelocity.mul(velocity.length() / 1000 * delta);
+        Vector2D targetVelocity = new Vector2D();
+        targetVelocity.offsetPolar(targetSpeed, targetHeading);
+        System.out.println(String.format("helm: target velocity %s", targetVelocity));
 
-        deltaVelocity.add(deltaAcceleration);
-        position.add(deltaVelocity);
+        Double targetRotation = currentVelocity.angleBetween(targetVelocity);
+        System.out.println(String.format("helm: target rotation %s", targetRotation));
+        Double rotation = Math.min(maxRotation, Math.abs(targetRotation));
+        if (targetRotation < 0) {
+            rotation = -rotation;
+        }
 
-        System.out.println(this);
-    }
+        Vector2D rotatedVelocity = currentVelocity.clone().rotate(rotation);
+        Double deltaSpeed = targetSpeed - currentSpeed;
+        Double acceleration = Math.min(maxAcceleration, Math.abs(deltaSpeed));
+        if (deltaSpeed < 0) {
+            acceleration = -acceleration;
+        }
 
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
+        Vector2D newVelocity = rotatedVelocity.clone().length(currentVelocity.length() + acceleration);
+        position.add(newVelocity.clone().multiply(newVelocity.length() / 1000 * delta));
+
+        currentSpeed = newVelocity.length();
+        currentHeading = newVelocity.angle();
+
+        System.out.println(String.format("helm: %s", position));
     }
 }

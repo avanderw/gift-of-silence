@@ -2,17 +2,17 @@ package gift.of.silence.core;
 
 public class Vector2D {
 
-    protected static final double EPSILON = 0.0000001;
-    protected static final double EPSILON_SQR = EPSILON * EPSILON;
+    protected static final Double EPSILON = 0.0000001;
+    protected static final Double EPSILON_SQR = EPSILON * EPSILON;
 
-    public double x;
-    public double y;
+    public Double x;
+    public Double y;
 
     public Vector2D(Object... args) {
         switch (args.length) {
             case 0:
-                x = 0;
-                y = 0;
+                x = 0D;
+                y = 0D;
                 break;
             case 1:
                 if (args[0] instanceof Vector2D) {
@@ -138,8 +138,8 @@ public class Vector2D {
     }
 
     public Vector2D zero() {
-        x = 0;
-        y = 0;
+        x = 0D;
+        y = 0D;
         return this;
     }
 
@@ -156,7 +156,11 @@ public class Vector2D {
     }
 
     public Vector2D length(Double length) {
-        return scale(length / length());
+        if (isZero()) {
+            // FIXME 
+        } else {
+            return scale(length / length());
+        }
     }
 
     public Vector2D normalise() {
@@ -331,7 +335,7 @@ public class Vector2D {
         } else if (angle < -Math.PI) {
             angle += 2 * Math.PI;
         }
-        
+
         return angle;
     }
 
