@@ -448,8 +448,8 @@ public class Vector2D {
     }
 
     public Vector2D offsetPolar(Double radius, Double angle) {
-        x += radius + Math.cos(angle);
-        y += radius + Math.sin(angle);
+        x += radius * Math.cos(angle);
+        y += radius * Math.sin(angle);
         return this;
     }
 
