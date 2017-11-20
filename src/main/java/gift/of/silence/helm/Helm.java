@@ -77,26 +77,37 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
         targetVelocity.offsetPolar(targetSpeed, targetHeading);
         System.out.println(String.format("helm: target velocity %s", targetVelocity));
 
-        Double targetRotation = currentVelocity.angleBetween(targetVelocity);
-        System.out.println(String.format("helm: target rotation %s", targetRotation));
-        Double rotation = Math.min(maxRotation, Math.abs(targetRotation));
-        if (targetRotation < 0) {
-            rotation = -rotation;
+        Vector2D newVelocity;
+        if (currentVelocity.isNear(targetVelocity)) {
+            newVelocity = currentVelocity.clone();
+        } else {
+            Double deltaSpeed = targetSpeed - currentSpeed;
+            Double acceleration = Math.min(maxAcceleration, Math.abs(deltaSpeed));
+            if (deltaSpeed < 0) {
+                acceleration = -acceleration;
+            }
+            System.out.println(String.format("helm: acceleration %s", acceleration));
+
+            if (currentVelocity.isZero()) {
+                newVelocity = targetVelocity.clone().length(acceleration);
+            } else {
+                Double targetRotation = currentVelocity.angleBetween(targetVelocity);
+                Double rotation = Math.min(maxRotation, Math.abs(targetRotation));
+                if (targetRotation < 0) {
+                    rotation = -rotation;
+                }
+                Vector2D rotatedVelocity = currentVelocity.clone().rotate(rotation);
+                newVelocity = rotatedVelocity.clone().length(currentVelocity.length() + acceleration);
+            }
+
+            System.out.println(String.format("helm: new velocity %s", newVelocity));
         }
 
-        Vector2D rotatedVelocity = currentVelocity.clone().rotate(rotation);
-        Double deltaSpeed = targetSpeed - currentSpeed;
-        Double acceleration = Math.min(maxAcceleration, Math.abs(deltaSpeed));
-        if (deltaSpeed < 0) {
-            acceleration = -acceleration;
-        }
-
-        Vector2D newVelocity = rotatedVelocity.clone().length(currentVelocity.length() + acceleration);
         position.add(newVelocity.clone().multiply(newVelocity.length() / 1000 * delta));
 
         currentSpeed = newVelocity.length();
         currentHeading = newVelocity.angle();
 
-        System.out.println(String.format("helm: %s", position));
+        System.out.println(String.format("helm: updated position %s", position));
     }
 }

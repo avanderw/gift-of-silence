@@ -157,7 +157,11 @@ public class Vector2D {
 
     public Vector2D length(Double length) {
         if (isZero()) {
-            // FIXME 
+            if (length == 0) {
+                return this;
+            } else {
+                throw new RuntimeException("don't have a direction to scale in");
+            }
         } else {
             return scale(length / length());
         }
