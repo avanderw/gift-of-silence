@@ -28,8 +28,7 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
         heading += 270D;
         heading %= 360D;
         targetHeading = heading / 180 * Math.PI;
-        events.notify("target-heading", targetHeading);
-        System.out.println(String.format("helm: heading set to %s (%s)", heading, targetHeading));
+        events.notify("helm:target-heading", targetHeading);
     }
 
     Double maxSpeed = 5D; // m/s
@@ -38,8 +37,7 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
 
     public void speed(double scale) {
         targetSpeed = maxSpeed * scale;
-        events.notify("targetSpeed", targetSpeed);
-        System.out.println("helm: speed set to " + targetSpeed);
+        events.notify("helm:target-speed", targetSpeed);
     }
 
     Double maxDepth = 100D;
@@ -48,8 +46,7 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
 
     public void depth(double depth) {
         targetDepth = depth;
-        events.notify("targetDepth", targetDepth);
-        System.out.println("helm: depth set to " + depth);
+        events.notify("helm:target-depth", targetDepth);
     }
 
     public void toggleDock() {
@@ -76,11 +73,9 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
     public void simulate(long delta) {
         Vector2D currentVelocity = new Vector2D();
         currentVelocity.offsetPolar(currentSpeed, currentHeading);
-        System.out.println(String.format("helm: current velocity %s", currentVelocity));
 
         Vector2D targetVelocity = new Vector2D();
         targetVelocity.offsetPolar(targetSpeed, targetHeading);
-        System.out.println(String.format("helm: target velocity %s", targetVelocity));
 
         Vector2D newVelocity;
         if (currentVelocity.isNear(targetVelocity)) {
@@ -91,7 +86,6 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
             if (deltaSpeed < 0) {
                 acceleration = -acceleration;
             }
-            System.out.println(String.format("helm: acceleration %s", acceleration));
 
             if (currentVelocity.isZero()) {
                 newVelocity = targetVelocity.clone().length(acceleration);
@@ -104,15 +98,16 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
                 Vector2D rotatedVelocity = currentVelocity.clone().rotate(rotation);
                 newVelocity = rotatedVelocity.clone().length(currentVelocity.length() + acceleration);
             }
-
-            System.out.println(String.format("helm: new velocity %s", newVelocity));
         }
 
         position.add(newVelocity.clone().multiply(newVelocity.length() / 1000 * delta));
 
         currentSpeed = newVelocity.length();
         currentHeading = newVelocity.angle();
-
-        System.out.println(String.format("helm: updated position %s", position));
+        
+        
+        events.notify("helm:simulate", currentSpeed);
+        events.notify("current-heading", currentHeading);
+        events.notify("position", position);
     }
 }
