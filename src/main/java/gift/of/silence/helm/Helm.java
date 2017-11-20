@@ -1,5 +1,6 @@
 package gift.of.silence.helm;
 
+import com.google.gson.Gson;
 import gift.of.silence.event.EventManager;
 import gift.of.silence.core.IConnectedSystem;
 import gift.of.silence.core.ISimulatedSystem;
@@ -62,7 +63,7 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
             speed(Double.parseDouble(message.substring("speed:".length())));
             return "helm: speed set";
         } else if (message.startsWith("depth:")) {
-            speed(Double.parseDouble(message.substring("depth:".length())));
+            depth(Double.parseDouble(message.substring("depth:".length())));
             return "helm: depth set";
         } else {
             return "helm: noop";
@@ -106,8 +107,6 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
         currentHeading = newVelocity.angle();
         
         
-        events.notify("helm:simulate", currentSpeed);
-        events.notify("current-heading", currentHeading);
-        events.notify("position", position);
+        events.notify("helm:simulate", new Gson().toJson(this));       
     }
 }
