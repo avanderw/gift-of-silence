@@ -21,20 +21,24 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
         public double crush;
     }
 
-    Double targetHeading = 0D;
-    Double currentHeading = 0D;
+    Double targetHeading = 270D / 180 * Math.PI;
+    Double currentHeading = 270D / 180 * Math.PI;
 
     public void heading(Double heading) {
+        heading += 270D;
+        heading %= 360D;
         targetHeading = heading / 180 * Math.PI;
+        events.notify("target-heading", targetHeading);
         System.out.println(String.format("helm: heading set to %s (%s)", heading, targetHeading));
     }
 
-    Double maxSpeed = 10D;
+    Double maxSpeed = 5D; // m/s
     Double targetSpeed = 0D;
     Double currentSpeed = 0D;
 
     public void speed(double scale) {
         targetSpeed = maxSpeed * scale;
+        events.notify("targetSpeed", targetSpeed);
         System.out.println("helm: speed set to " + targetSpeed);
     }
 
@@ -44,6 +48,7 @@ public class Helm implements ISimulatedSystem, IConnectedSystem {
 
     public void depth(double depth) {
         targetDepth = depth;
+        events.notify("targetDepth", targetDepth);
         System.out.println("helm: depth set to " + depth);
     }
 
