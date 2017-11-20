@@ -31,10 +31,13 @@ public class EventManager {
     public void unsubscribe(String eventType, EventListener listener) {
         listeners.get(eventType).remove(listener);
     }
-    
-    public void notify(String eventType, Object object) {
-        listeners.get(eventType).forEach((listener) -> {
-            listener.update(eventType, object);
-        });
+
+    public void notify(String eventType, Object payload) {
+        System.out.println(String.format("event{type:%s, payload:%s}", eventType, payload));
+        if (listeners.get(eventType) != null) {
+            listeners.get(eventType).forEach((listener) -> {
+                listener.update(eventType, payload);
+            });
+        }
     }
 }
