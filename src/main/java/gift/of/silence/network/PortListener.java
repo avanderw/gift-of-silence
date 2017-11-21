@@ -1,5 +1,7 @@
-package gift.of.silence.core;
+package gift.of.silence.network;
 
+import gift.of.silence.core.Server;
+import gift.of.silence.core.SubSystem;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,52 +9,53 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Server implements Runnable {
+public class PortListener implements Runnable {
 
+    private final Map<InetAddress, Map<Integer, PacketHandler>> connected = new HashMap();
     private volatile Thread thread;
 
-    private final Map<InetAddress, IClient> connected = new HashMap();
-    private final Game game = new Game();
-
-    public void start() {
+    void start() {
         thread = new Thread(this);
         thread.start();
     }
 
-    public void stop() {
+    void stop() {
         thread = null;
     }
 
     @Override
     public void run() {
+        Integer serverPort = 43397;
         DatagramSocket socket;
         try {
-            socket = new DatagramSocket(43397);
+            socket = new DatagramSocket(serverPort);
         } catch (SocketException ex) {
             throw new RuntimeException(ex);
         }
 
-        System.out.println("server started");
+        ExecutorService packetHandlers = Executors.newCachedThreadPool();
+        System.out.println(String.format("%s:%s listening", socket.getInetAddress(), socket.getPort()));
         while (thread == Thread.currentThread()) {
-            DatagramPacket receivePacket = new DatagramPacket(new byte[508], 508);
+            DatagramPacket packet = new DatagramPacket(new byte[508], 508);
             try {
-                socket.receive(receivePacket);
+                socket.receive(packet);
+                packetHandlers.execute(new PacketHandler(packet));
             } catch (IOException ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace(System.out);
                 continue;
             }
-            InetAddress ipAddress = receivePacket.getAddress();
-            int port = receivePacket.getPort();
-            String message = new String(receivePacket.getData());
-            message = message.trim();
+            
+            
 
             byte[] sendData = null;
             DatagramPacket sendPacket = null;
             if (connected.containsKey(ipAddress)) {
-                System.out.println(String.format("->%s:%d %s", new Object[]{ipAddress, port, message}));
+                System.out.println(String.format("->%s:%d %s", new Object[]{ipAddress, clientPort, message}));
 
                 switch (message) {
                     case "play":
@@ -72,7 +75,7 @@ public class Server implements Runnable {
                         sendData = connected.get(ipAddress).onMessage(message).getBytes();
                 }
             } else {
-                System.out.println(String.format("o-%s:%d %s", new Object[]{ipAddress, port, message}));
+                System.out.println(String.format("o-%s:%d %s", new Object[]{ipAddress, clientPort, message}));
                 switch (message) {
                     case "helm":
                         connected.put(ipAddress, SubSystem.HELM);
@@ -84,8 +87,8 @@ public class Server implements Runnable {
                 }
             }
 
-            System.out.println(String.format("<-%s:%d %s", new Object[]{ipAddress, port, new String(sendData)}));
-            sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, port);
+            System.out.println(String.format("<-%s:%d %s", new Object[]{ipAddress, clientPort, new String(sendData)}));
+            sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, clientPort);
             try {
                 socket.send(sendPacket);
             } catch (IOException ex) {

@@ -9,6 +9,6 @@ package gift.of.silence.core;
  *
  * @author CP318674
  */
-public interface IConnectedSystem {
+public interface IClient {
     String onMessage(String message);
 }

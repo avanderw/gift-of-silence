@@ -2,11 +2,11 @@ package gift.of.silence.helm;
 
 import com.google.gson.Gson;
 import gift.of.silence.event.EventManager;
-import gift.of.silence.core.IConnectedSystem;
 import gift.of.silence.core.ISimulatedSystem;
 import gift.of.silence.core.Vector2D;
+import gift.of.silence.core.IClient;
 
-public class Helm implements ISimulatedSystem, IConnectedSystem {
+public class Helm implements ISimulatedSystem, IClient {
 
     public transient EventManager events = new EventManager();
 
