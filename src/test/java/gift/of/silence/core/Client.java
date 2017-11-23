@@ -21,7 +21,7 @@ public class Client {
             InetAddress ipAddress = InetAddress.getByName("localhost");
 
             String request = null;
-            while (request == null || !request.equals("disconnect")) {
+            while (request == null) {
                 try {
                     request = console.readLine();
                     byte[] sendData = request.getBytes();

@@ -14,7 +14,7 @@ public class HelmControl {
                 response = " -helm: registered";
                 break;
             default:
-                response = String.format("?-helm: unknown message (%s)", message);
+                response = String.format("?-helm: unknown (%s)", message);
         }
         
         return response.getBytes();

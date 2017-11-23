@@ -1,14 +1,12 @@
 package gift.of.silence.network;
 
-import gift.of.silence.core.Server;
+import gift.of.silence.game.Game;
 import gift.of.silence.helm.Helm;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class PacketRouter implements Runnable {
 
@@ -36,6 +34,9 @@ class PacketRouter implements Runnable {
             switch (message) {
                 case "helm":
                     clientHandler = new Helm();
+                    break;
+                case "game": 
+                    clientHandler = new Game();
                     break;
                 default:
                     System.out.println(String.format("?-router: %s:%s not registered", ipAddress, clientPort));
