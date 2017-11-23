@@ -1,8 +1,8 @@
 package gift.of.silence.core;
 
-import gift.of.silence.helm.Helm;
+import gift.of.silence.helm.HelmSimulator;
 
 public class SubSystem {
 
-    public static final Helm HELM = new Helm();
+    public static final HelmSimulator HELM = new HelmSimulator();
 }

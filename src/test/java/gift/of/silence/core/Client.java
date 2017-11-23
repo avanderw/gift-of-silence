@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Client {
 
     public static void main(String[] args) {
-        System.out.println("client running");
+        System.out.println("o-client: running");
         BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
         try (DatagramSocket socket = new DatagramSocket()) {
             socket.setSoTimeout(256);
@@ -30,9 +30,9 @@ public class Client {
                     DatagramPacket receivePacket = new DatagramPacket(new byte[508], 508);
                     socket.receive(receivePacket);
                     String response = new String(receivePacket.getData());
-                    System.out.println(String.format("<- %s", new Object[]{response}));
+                    System.out.println(String.format("%s", new Object[]{response}));
                 } catch (IOException ex) {
-                    System.out.println(String.format("?- %s", new Object[]{ex.getMessage()}));
+                    System.out.println(String.format("?-%s", new Object[]{ex.getMessage()}));
                 }
             }
         } catch (SocketException | UnknownHostException ex) {
