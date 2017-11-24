@@ -19,6 +19,7 @@ class PacketRouter implements Runnable {
 
     @Override
     public void run() {
+        Thread.currentThread().setName("packet-router");
         InetAddress ipAddress = receivePacket.getAddress();
         int clientPort = receivePacket.getPort();
 
@@ -35,11 +36,18 @@ class PacketRouter implements Runnable {
                 case "helm":
                     clientHandler = new Helm();
                     break;
-                case "game": 
+                case "game":
                     clientHandler = new Game();
                     break;
                 default:
-                    System.out.println(String.format("?-router: %s:%s not registered", ipAddress, clientPort));
+                    byte[] response = String.format("?-router: %s:%s not registered", ipAddress, clientPort).getBytes();
+                    DatagramPacket sendPacket = new DatagramPacket(response, response.length, ipAddress, clientPort);
+                    try {
+                        System.out.println(String.format("<-router: %s", new String(response)));
+                        Network.socket.send(sendPacket);
+                    } catch (IOException ex) {
+                        System.out.println(String.format("x-router: %s", ex.getMessage()));
+                    }
                     return;
 
             }

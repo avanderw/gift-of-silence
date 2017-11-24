@@ -1,18 +1,12 @@
 package gift.of.silence.network;
 
-import gift.of.silence.core.Server;
-import gift.of.silence.core.SubSystem;
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PortListener implements Runnable {
 
@@ -30,6 +24,7 @@ public class PortListener implements Runnable {
 
     @Override
     public void run() {
+        Thread.currentThread().setName("port-listener");
         ExecutorService packetRouters = Executors.newCachedThreadPool();
         System.out.println(String.format("o-listener: started"));
         while (thread == Thread.currentThread()) {
