@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 public class HelmControl {
 
     StateMachine state = new StateMachine();
+    HelmData data = new HelmData();
 
     HelmControl() {
 
@@ -15,19 +16,22 @@ public class HelmControl {
         String message = new String(packet.getData());
         message = message.trim();
 
-        String response = null;
-        switch (message) {
+        String response;
+        switch (message.substring(message.indexOf(":"))) {
             case "helm":
                 response = "o-helm: registered";
                 break;
             case "heading":
-                response = String.format(" -helm: heading (target=%s, current=%s)");
+                data.heading.target(Double.parseDouble(message));
+                response = String.format(" -helm: heading (target=%s, current=%s)", data.heading.target(), data.heading.current());
                 break;
             case "speed":
-                response = String.format(" -helm: speed (target=%s, current=%s)");
+                data.speed.target(Double.parseDouble(message));
+                response = String.format(" -helm: speed (target=%s, current=%s)", data.speed.target(), data.speed.current());
                 break;
             case "depth":
-                response = String.format(" -helm: depth (target=%s, current=%s)");
+                data.depth.target(Double.parseDouble(message));
+                response = String.format(" -helm: depth (target=%s, current=%s)", data.depth.target(), data.depth.current());
                 break;
             case "disconnect":
                 response = String.format("x-helm: disconnecting");
