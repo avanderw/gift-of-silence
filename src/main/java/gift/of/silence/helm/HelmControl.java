@@ -6,7 +6,7 @@ import java.net.DatagramPacket;
 public class HelmControl {
 
     StateMachine state = new StateMachine();
-    HelmData data = new HelmData();
+    HelmData data;
 
     HelmControl() {
 
