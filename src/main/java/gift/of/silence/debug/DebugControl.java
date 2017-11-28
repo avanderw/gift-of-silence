@@ -42,7 +42,7 @@ class DebugControl {
                 break;
             case "debug":
                 response = String.format("registered");
-                Logger.info(response);
+                Logger.info(String.format("%s:%s %s", packet.getAddress(), packet.getPort(), response));
                 break;
             default:
                 response = String.format("unknown message = %s", message);

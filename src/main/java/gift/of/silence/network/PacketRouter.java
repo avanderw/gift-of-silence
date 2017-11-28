@@ -4,7 +4,6 @@ import gift.of.silence.debug.Debug;
 import gift.of.silence.game.Game;
 import gift.of.silence.helm.Helm;
 import gift.of.silence.intel.Intel;
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -18,10 +17,10 @@ class PacketRouter implements Runnable {
     private final Game game;
     private final Helm helm;
     private final Intel intel;
-    private final DatagramPacket receivePacket;
+    private final DatagramPacket packet;
 
-    PacketRouter(DatagramPacket packet, Game game,Debug debug, Helm helm, Intel intel) {
-        this.receivePacket = packet;
+    PacketRouter(DatagramPacket packet, Game game, Debug debug, Helm helm, Intel intel) {
+        this.packet = packet;
         this.game = game;
         this.helm = helm;
         this.debug = debug;
@@ -31,55 +30,44 @@ class PacketRouter implements Runnable {
     @Override
     public void run() {
         Thread.currentThread().setName("packet-router");
-        InetAddress ipAddress = receivePacket.getAddress();
-        int clientPort = receivePacket.getPort();
+        InetAddress ip = packet.getAddress();
+        int port = packet.getPort();
 
-        if (!handlers.containsKey(ipAddress)) {
-            handlers.put(ipAddress, new HashMap());
+        if (!handlers.containsKey(ip)) {
+            handlers.put(ip, new HashMap());
         }
 
-        if (!handlers.get(ipAddress).containsKey(clientPort)) {
-            IPacketHandler clientHandler;
+        if (!handlers.get(ip).containsKey(port)) {
+            IPacketHandler handler;
 
-            String message = new String(receivePacket.getData());
+            String message = new String(packet.getData());
             message = message.trim();
             Logger.trace(String.format("<- %s", message));
-            
+
             switch (message) {
                 case "helm":
-                    clientHandler = helm;
+                    helm.add(ip, port);
+                    handler = helm;
                     break;
                 case "game":
-                    clientHandler = game;
+                    handler = game;
                     break;
                 case "debug":
-                    clientHandler = debug;
+                    handler = debug;
                     break;
                 case "intel":
-                    clientHandler = intel;
+                    handler = intel;
                     break;
                 default:
-                    byte[] response = String.format("%s:%s not registered", ipAddress, clientPort).getBytes();
-                    DatagramPacket sendPacket = new DatagramPacket(response, response.length, ipAddress, clientPort);
-                    try {
-                        Logger.warn(String.format("-> %s", new String(response)));
-                        Network.socket.send(sendPacket);
-                    } catch (IOException ex) {
-                        Logger.error(String.format("%s", ex.getMessage()));
-                    }
+                    byte[] response = String.format("%s:%s not registered", ip, port).getBytes();
+                    Network.send(response, ip, port);
                     return;
 
             }
-            handlers.get(ipAddress).put(clientPort, clientHandler);
+            handlers.get(ip).put(port, handler);
         }
 
-        byte[] response = handlers.get(ipAddress).get(clientPort).packetHandler(receivePacket);
-        DatagramPacket sendPacket = new DatagramPacket(response, response.length, ipAddress, clientPort);
-        try {
-            Logger.trace(String.format("-> %s", new String(response)));
-            Network.socket.send(sendPacket);
-        } catch (IOException ex) {
-            Logger.error(String.format("%s", ex.getMessage()));
-        }
+        byte[] response = handlers.get(ip).get(port).packetHandler(packet);
+        Network.send(response, ip, port);
     }
 }

@@ -25,7 +25,7 @@ class GameControl {
         switch (message) {
             case "game": 
                 response = "registered";
-                Logger.info(response);
+                Logger.info(String.format("%s:%s %s", packet.getAddress(), packet.getPort(), response));
                 state.transition(StateRegistered.class);
                 break;
             case "play":

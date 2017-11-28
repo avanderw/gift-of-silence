@@ -2,21 +2,22 @@ package gift.of.silence.helm;
 
 import gift.of.silence.game.Game;
 import gift.of.silence.core.Vector2D;
+import gift.of.silence.network.Network;
 import java.util.function.Consumer;
 import org.pmw.tinylog.Logger;
 
 public class HelmSimulator {
 
+    Helm helm;
     HelmData data;
-    Game game;
-    
-    HelmSimulator(Game game, HelmData data) {
-        this.game = game;
+
+    HelmSimulator(Helm helm, HelmData data) {
         this.data = data;
-        
-        game.events.subscribe(Game.Event.UPDATE, update);
+        this.helm = helm;
+
+        Game.events.subscribe(Game.Event.UPDATE, update);
     }
-    
+
     Consumer<Long> update = (delta) -> {
         Logger.trace("update");
         Vector2D currentVelocity = data.velocity.current();
@@ -25,5 +26,10 @@ public class HelmSimulator {
 
         data.position.add(currentVelocity.clone().multiply(currentVelocity.length() / 1000 * delta));
         data.velocity.current(currentVelocity);
+
+        helm.clients.forEach((client) -> {
+            Network.send("update".getBytes(), client.ip, client.port);
+        });
+
     };
 }

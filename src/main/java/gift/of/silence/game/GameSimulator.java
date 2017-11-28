@@ -24,7 +24,7 @@ public class GameSimulator implements Runnable {
             long start = System.currentTimeMillis();
             long next = start + timeElapsed;
 
-            game.events.fire(Game.Event.UPDATE, timeElapsed);
+            Game.events.fire(Game.Event.UPDATE, timeElapsed);
 
             long end = System.currentTimeMillis();
             if (next < end) {

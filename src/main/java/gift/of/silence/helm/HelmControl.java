@@ -7,10 +7,10 @@ import org.pmw.tinylog.Logger;
 public class HelmControl {
 
     StateMachine state = new StateMachine();
-    HelmData data;
-
-    HelmControl() {
-
+    final HelmData data;
+    
+    HelmControl(HelmData data) {
+        this.data = data;
     }
 
     byte[] packetHandler(DatagramPacket packet) {
@@ -22,7 +22,7 @@ public class HelmControl {
         switch (op) {
             case "helm":
                 response = "registered";
-                Logger.info(response);
+                Logger.info(String.format("%s:%s %s", packet.getAddress(), packet.getPort(), response));
                 break;
             case "heading":
                 data.heading.target(Double.parseDouble(message));

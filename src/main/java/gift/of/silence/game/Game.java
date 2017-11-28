@@ -5,7 +5,7 @@ import gift.of.silence.network.IPacketHandler;
 import java.net.DatagramPacket;
 
 public class Game implements IPacketHandler {
-    public EventManager events = new EventManager(Event.UPDATE);
+    public static EventManager events = new EventManager(Event.UPDATE);
 
     GameSimulator loop = new GameSimulator(1L, this);
     GameControl control = new GameControl(this);

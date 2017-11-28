@@ -20,7 +20,7 @@ public class GiftOfSilence {
 
         Game game = new Game();
         Debug debug = new Debug();
-        Helm helm = new Helm(game);
+        Helm helm = new Helm();
         Intel intel = new Intel();
         
         Network network = new Network(game, debug, helm, intel);
