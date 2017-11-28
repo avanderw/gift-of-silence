@@ -3,6 +3,7 @@ package gift.of.silence.statemachine;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import org.pmw.tinylog.Logger;
 
 public class StateMachine {
 
@@ -16,25 +17,25 @@ public class StateMachine {
         }
     }
 
-    public void change(Class state) {
+    public void transition(Class state) {
         if (current == null) {
-            System.out.println(String.format("?-state-machine(%s): initial state not set", current.getSimpleName()));
+            Logger.warn(String.format("initial state not set"));
         }
         
         if (!states.containsKey(state)) {
-            System.out.println(String.format("x-state-machine(%s): unknown state(%s)", current.getSimpleName(), state.getSimpleName()));
+            Logger.error(String.format("%s unknown", state.getSimpleName()));
             return;
         }
 
         if (states.get(state).from.contains(current)) {
-            System.out.println(String.format(" -state-machine(%s): change to state(%s)", current.getSimpleName(), state.getSimpleName()));
+            Logger.debug(String.format("%s -> %s", current.getSimpleName(), state.getSimpleName()));
             
             states.get(current).exit();
             states.get(state).enter();
             
             current = state;
         } else {
-            System.out.println(String.format("?-state-machine(%s): cannot change to state (%s)", current.getSimpleName(), state.getSimpleName()));
+            Logger.warn(String.format("invalid %s -> %s", current.getSimpleName(), state.getSimpleName()));
         }
     }
 

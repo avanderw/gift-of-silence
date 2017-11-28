@@ -28,7 +28,7 @@ public class EventManager {
     }
 
     public void fire(String eventType, Object payload) {
-        Logger.trace(String.format("%tT: event{%s(%s)}", new Date(), eventType, payload));
+        Logger.trace(String.format("%s ( %s )", eventType, payload));
         if (consumers.get(eventType) != null) {
             consumers.get(eventType).forEach((listener) -> {
                 listener.accept(payload);

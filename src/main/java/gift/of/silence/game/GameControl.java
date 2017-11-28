@@ -24,23 +24,23 @@ class GameControl {
         switch (message) {
             case "game": 
                 response = "o-game: registered";
-                state.change(StateRegistered.class);
+                state.transition(StateRegistered.class);
                 break;
             case "play":
                 response = " -game: playing";
-                state.change(StatePlaying.class);
+                state.transition(StatePlaying.class);
                 break;
             case "pause":
                 response = " -game: pausing";
-                state.change(StatePaused.class);
+                state.transition(StatePaused.class);
                 break;
             case "stop":
                 response = " -game: stopping";
-                state.change(StateStopped.class);
+                state.transition(StateStopped.class);
                 break;
             case "disconnect":
                 response = "x-game: disconnecting";
-                state.change(StateUnregistered.class);
+                state.transition(StateUnregistered.class);
                 break;
             default:
                 response = String.format("?-game: unknown (%s)", message);
