@@ -8,6 +8,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+import org.pmw.tinylog.Logger;
 
 class PacketRouter implements Runnable {
 
@@ -53,10 +54,10 @@ class PacketRouter implements Runnable {
                     byte[] response = String.format("?-router: %s:%s not registered", ipAddress, clientPort).getBytes();
                     DatagramPacket sendPacket = new DatagramPacket(response, response.length, ipAddress, clientPort);
                     try {
-                        System.out.println(String.format("<-router: %s", new String(response)));
+                        Logger.trace(String.format("-> %s", new String(response)));
                         Network.socket.send(sendPacket);
                     } catch (IOException ex) {
-                        System.out.println(String.format("x-router: %s", ex.getMessage()));
+                        Logger.error(String.format("%s", ex.getMessage()));
                     }
                     return;
 
@@ -67,10 +68,10 @@ class PacketRouter implements Runnable {
         byte[] response = handlers.get(ipAddress).get(clientPort).packetHandler(receivePacket);
         DatagramPacket sendPacket = new DatagramPacket(response, response.length, ipAddress, clientPort);
         try {
-            System.out.println(String.format("<-router: %s", new String(response)));
+            Logger.trace(String.format("-> %s", new String(response)));
             Network.socket.send(sendPacket);
         } catch (IOException ex) {
-            System.out.println(String.format("x-router: %s", ex.getMessage()));
+            Logger.error(String.format("%s", ex.getMessage()));
         }
     }
 }

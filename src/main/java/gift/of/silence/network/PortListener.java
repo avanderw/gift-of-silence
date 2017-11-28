@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.pmw.tinylog.Logger;
 
 public class PortListener implements Runnable {
 
@@ -29,17 +30,17 @@ public class PortListener implements Runnable {
     public void run() {
         Thread.currentThread().setName("port-listener");
         ExecutorService packetRouters = Executors.newCachedThreadPool();
-        System.out.println(String.format("o-listener: started"));
+        Logger.info(String.format("started"));
         while (thread == Thread.currentThread()) {
             DatagramPacket packet = new DatagramPacket(new byte[508], 508);
             try {
                 Network.socket.receive(packet);
                 packetRouters.execute(new PacketRouter(packet, game, helm, debug));
             } catch (IOException ex) {
-                ex.printStackTrace(System.out);
+                Logger.error(ex.getMessage());
             }
         }
-        System.out.println(String.format("x-listener: stopped"));
+        Logger.info(String.format("stopped"));
     }
 
     void start() {

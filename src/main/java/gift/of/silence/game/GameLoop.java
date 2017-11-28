@@ -1,6 +1,7 @@
 package gift.of.silence.game;
 
 import java.util.concurrent.TimeUnit;
+import org.pmw.tinylog.Logger;
 
 public class GameLoop implements Runnable {
 
@@ -17,7 +18,7 @@ public class GameLoop implements Runnable {
     @Override
     public void run() {
         Thread.currentThread().setName("game-loop");
-        System.out.println("game-loop: started");
+        Logger.debug("started");
         long timeElapsed = 1000 / fps;
         while (thread == Thread.currentThread()) {
             long start = System.currentTimeMillis();
@@ -27,13 +28,13 @@ public class GameLoop implements Runnable {
 
             long end = System.currentTimeMillis();
             if (next < end) {
-                System.out.println("game-loop: taking longer than refresh rate");
+                Logger.warn("taking longer than refresh rate");
             }
 
             try {
                 TimeUnit.MILLISECONDS.sleep(next - end);
             } catch (InterruptedException ex) {
-                System.out.println("game-loop: thread interrupted");
+                Logger.warn("thread interrupted");
             }
         }
     }
