@@ -1,5 +1,6 @@
 package gift.of.silence.network;
 
+import gift.of.silence.debug.Debug;
 import gift.of.silence.game.Game;
 import gift.of.silence.helm.Helm;
 import java.io.IOException;
@@ -13,13 +14,15 @@ import java.util.concurrent.Executors;
 public class PortListener implements Runnable {
 
     private final Map<InetAddress, Map<Integer, PacketRouter>> connected = new HashMap();
+    private final Debug debug;
     private final Game game;
     private final Helm helm;
     private volatile Thread thread;
 
-    PortListener(Game game, Helm helm) {
+    PortListener(Game game, Debug debug, Helm helm) {
         this.game = game;
         this.helm = helm;
+        this.debug = debug;
 
     }
     @Override
@@ -31,7 +34,7 @@ public class PortListener implements Runnable {
             DatagramPacket packet = new DatagramPacket(new byte[508], 508);
             try {
                 Network.socket.receive(packet);
-                packetRouters.execute(new PacketRouter(packet, game, helm));
+                packetRouters.execute(new PacketRouter(packet, game, helm, debug));
             } catch (IOException ex) {
                 ex.printStackTrace(System.out);
             }

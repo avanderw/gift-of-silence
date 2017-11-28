@@ -1,5 +1,6 @@
 package gift.of.silence.network;
 
+import gift.of.silence.debug.Debug;
 import gift.of.silence.game.Game;
 import gift.of.silence.helm.Helm;
 import java.io.IOException;
@@ -11,14 +12,16 @@ import java.util.Map;
 class PacketRouter implements Runnable {
 
     private static final Map<InetAddress, Map<Integer, IPacketHandler>> handlers = new HashMap();
+    private final Debug debug;
     private final Game game;
     private final Helm helm;
     private final DatagramPacket receivePacket;
 
-    PacketRouter(DatagramPacket packet, Game game, Helm helm) {
+    PacketRouter(DatagramPacket packet, Game game, Helm helm, Debug debug) {
         this.receivePacket = packet;
         this.game = game;
         this.helm = helm;
+        this.debug = debug;
     }
 
     @Override
@@ -42,6 +45,9 @@ class PacketRouter implements Runnable {
                     break;
                 case "game":
                     clientHandler = game;
+                    break;
+                case "debug":
+                    clientHandler = debug;
                     break;
                 default:
                     byte[] response = String.format("?-router: %s:%s not registered", ipAddress, clientPort).getBytes();

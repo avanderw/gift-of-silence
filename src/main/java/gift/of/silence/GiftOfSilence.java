@@ -1,5 +1,6 @@
 package gift.of.silence;
 
+import gift.of.silence.debug.Debug;
 import gift.of.silence.game.Game;
 import gift.of.silence.helm.Helm;
 import gift.of.silence.network.Network;
@@ -10,8 +11,9 @@ public class GiftOfSilence {
 
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {
         Game game = new Game();
+        Debug debug = new Debug();
         Helm helm = new Helm();
-        Network network = new Network(game, helm);
+        Network network = new Network(game, debug, helm);
         
         network.startPortListener();
     }
