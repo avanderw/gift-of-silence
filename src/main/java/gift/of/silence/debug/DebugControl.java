@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gift.of.silence.event;
+package gift.of.silence.debug;
 
 /**
  *
  * @author CP318674
  */
-public interface EventListener {
-
-    void update(String eventType, Object object);
+public class DebugControl {
     
 }

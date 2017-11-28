@@ -2,22 +2,26 @@ package gift.of.silence.helm;
 
 import gift.of.silence.game.Game;
 import gift.of.silence.core.Vector2D;
+import java.util.function.Consumer;
 
 public class HelmSimulator {
 
     HelmData data;
     Game game;
-
-    public void toggleDock() {
-
+    
+    HelmSimulator(Game game, HelmData data) {
+        this.game = game;
+        this.data = data;
+        
+        game.events.subscribe(Game.Event.UPDATE, update);
     }
-
-    public void simulate(long delta) {
+    
+    Consumer<Long> update = (delta) -> {
         Vector2D currentVelocity = data.velocity.current();
         currentVelocity.rotate(data.velocity.rotation());
         currentVelocity.length(currentVelocity.length() + data.speed.acceleration());
 
         data.position.add(currentVelocity.clone().multiply(currentVelocity.length() / 1000 * delta));
         data.velocity.current(currentVelocity);
-    }
+    };
 }

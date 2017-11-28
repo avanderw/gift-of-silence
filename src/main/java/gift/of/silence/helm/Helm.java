@@ -1,6 +1,6 @@
 package gift.of.silence.helm;
 
-import gift.of.silence.event.EventManager;
+import gift.of.silence.eventmanager.EventManager;
 import gift.of.silence.network.IPacketHandler;
 import java.net.DatagramPacket;
 

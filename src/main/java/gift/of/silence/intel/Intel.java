@@ -1,7 +1,7 @@
 package gift.of.silence.intel;
 
 import com.sun.javafx.geom.Vec3d;
-import gift.of.silence.event.EventManager;
+import gift.of.silence.eventmanager.EventManager;
 
 public class Intel {
 

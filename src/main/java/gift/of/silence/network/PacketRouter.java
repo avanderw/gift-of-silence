@@ -11,10 +11,14 @@ import java.util.Map;
 class PacketRouter implements Runnable {
 
     private static final Map<InetAddress, Map<Integer, IPacketHandler>> handlers = new HashMap();
+    private final Game game;
+    private final Helm helm;
     private final DatagramPacket receivePacket;
 
-    PacketRouter(DatagramPacket packet) {
+    PacketRouter(DatagramPacket packet, Game game, Helm helm) {
         this.receivePacket = packet;
+        this.game = game;
+        this.helm = helm;
     }
 
     @Override
@@ -34,10 +38,10 @@ class PacketRouter implements Runnable {
             message = message.trim();
             switch (message) {
                 case "helm":
-                    clientHandler = new Helm();
+                    clientHandler = helm;
                     break;
                 case "game":
-                    clientHandler = new Game();
+                    clientHandler = game;
                     break;
                 default:
                     byte[] response = String.format("?-router: %s:%s not registered", ipAddress, clientPort).getBytes();

@@ -6,11 +6,11 @@ import java.net.DatagramPacket;
 class GameControl {
     StateMachine state = new StateMachine();
     
-    GameControl() {
+    GameControl(Game game) {
         state.addState(new StateUnregistered(), StateStopped.class);
         state.addState(new StateRegistered(), StateUnregistered.class);
-        state.addState(new StatePlaying(), StateRegistered.class, StatePaused.class);
-        state.addState(new StatePaused(), StatePlaying.class);
+        state.addState(new StatePlaying(game), StateRegistered.class, StatePaused.class);
+        state.addState(new StatePaused(game), StatePlaying.class);
         state.addState(new StateStopped(), StatePlaying.class, StatePaused.class);
         
         state.initial(StateUnregistered.class);
