@@ -1,29 +1,15 @@
 package gift.of.silence.intel;
 
-import com.sun.javafx.geom.Vec3d;
-import gift.of.silence.eventmanager.EventManager;
+import gift.of.silence.network.IPacketHandler;
+import java.net.DatagramPacket;
 
-public class Intel {
+public class Intel implements IPacketHandler{
+    final IntelControl control = new IntelControl();
 
-    public EventManager events;
-    public Vec3d position;
+    @Override
+    public byte[] packetHandler(DatagramPacket packet) {
 
-    public Intel() {
-        events = new EventManager();
+        return control.packetHandler(packet);
     }
 
-    public void dropSensor() {
-    }
-
-    public void toggleTelescope() {
-    }
-
-    public void toggleRadar() {
-    }
-
-    public void toggleSonar() {
-    }
-
-    public void toggleActive() {
-    }
 }

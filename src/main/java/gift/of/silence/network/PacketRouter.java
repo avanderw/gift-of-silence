@@ -3,6 +3,7 @@ package gift.of.silence.network;
 import gift.of.silence.debug.Debug;
 import gift.of.silence.game.Game;
 import gift.of.silence.helm.Helm;
+import gift.of.silence.intel.Intel;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -16,13 +17,15 @@ class PacketRouter implements Runnable {
     private final Debug debug;
     private final Game game;
     private final Helm helm;
+    private final Intel intel;
     private final DatagramPacket receivePacket;
 
-    PacketRouter(DatagramPacket packet, Game game, Helm helm, Debug debug) {
+    PacketRouter(DatagramPacket packet, Game game,Debug debug, Helm helm, Intel intel) {
         this.receivePacket = packet;
         this.game = game;
         this.helm = helm;
         this.debug = debug;
+        this.intel = intel;
     }
 
     @Override
@@ -51,6 +54,9 @@ class PacketRouter implements Runnable {
                     break;
                 case "debug":
                     clientHandler = debug;
+                    break;
+                case "intel":
+                    clientHandler = intel;
                     break;
                 default:
                     byte[] response = String.format("%s:%s not registered", ipAddress, clientPort).getBytes();

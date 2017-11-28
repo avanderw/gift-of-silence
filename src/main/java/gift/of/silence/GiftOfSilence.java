@@ -3,6 +3,7 @@ package gift.of.silence;
 import gift.of.silence.debug.Debug;
 import gift.of.silence.game.Game;
 import gift.of.silence.helm.Helm;
+import gift.of.silence.intel.Intel;
 import gift.of.silence.network.Network;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,7 +21,9 @@ public class GiftOfSilence {
         Game game = new Game();
         Debug debug = new Debug();
         Helm helm = new Helm(game);
-        Network network = new Network(game, debug, helm);
+        Intel intel = new Intel();
+        
+        Network network = new Network(game, debug, helm, intel);
 
         network.startPortListener();
     }

@@ -7,7 +7,7 @@ import java.net.DatagramPacket;
 public class Game implements IPacketHandler {
     public EventManager events = new EventManager(Event.UPDATE);
 
-    GameLoop loop = new GameLoop(1L, this);
+    GameSimulator loop = new GameSimulator(1L, this);
     GameControl control = new GameControl(this);
 
     @Override

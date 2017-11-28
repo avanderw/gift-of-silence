@@ -3,21 +3,21 @@ package gift.of.silence.game;
 import java.util.concurrent.TimeUnit;
 import org.pmw.tinylog.Logger;
 
-public class GameLoop implements Runnable {
+public class GameSimulator implements Runnable {
 
     private final Long fps;
     private final Game game;
 
     private volatile Thread thread;
 
-    GameLoop(Long fps, Game game) {
+    GameSimulator(Long fps, Game game) {
         this.fps = fps;
         this.game = game;
     }
 
     @Override
     public void run() {
-        Thread.currentThread().setName("game-loop");
+        Thread.currentThread().setName("game-simulator");
         Logger.debug("started");
         long timeElapsed = 1000 / fps;
         while (thread == Thread.currentThread()) {
