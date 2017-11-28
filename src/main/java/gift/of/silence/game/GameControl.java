@@ -2,6 +2,7 @@ package gift.of.silence.game;
 
 import gift.of.silence.statemachine.StateMachine;
 import java.net.DatagramPacket;
+import org.pmw.tinylog.Logger;
 
 class GameControl {
     StateMachine state = new StateMachine();
@@ -23,27 +24,33 @@ class GameControl {
         String response;
         switch (message) {
             case "game": 
-                response = "o-game: registered";
+                response = "registered";
+                Logger.info(response);
                 state.transition(StateRegistered.class);
                 break;
             case "play":
-                response = " -game: playing";
+                response = "playing";
+                Logger.info(response);
                 state.transition(StatePlaying.class);
                 break;
             case "pause":
-                response = " -game: pausing";
+                response = "pausing";
+                Logger.info(response);
                 state.transition(StatePaused.class);
                 break;
             case "stop":
-                response = " -game: stopping";
+                response = "stopping";
+                Logger.info(response);
                 state.transition(StateStopped.class);
                 break;
             case "disconnect":
-                response = "x-game: disconnecting";
+                response = "disconnecting";
+                Logger.info(response);
                 state.transition(StateUnregistered.class);
                 break;
             default:
-                response = String.format("?-game: unknown (%s)", message);
+                response = String.format("unknown message = %s", message);
+                Logger.warn(response);
         }
 
         return response.getBytes();

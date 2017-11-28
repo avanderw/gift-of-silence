@@ -3,6 +3,7 @@ package gift.of.silence.helm;
 import gift.of.silence.game.Game;
 import gift.of.silence.core.Vector2D;
 import java.util.function.Consumer;
+import org.pmw.tinylog.Logger;
 
 public class HelmSimulator {
 
@@ -17,6 +18,7 @@ public class HelmSimulator {
     }
     
     Consumer<Long> update = (delta) -> {
+        Logger.trace("update");
         Vector2D currentVelocity = data.velocity.current();
         currentVelocity.rotate(data.velocity.rotation());
         currentVelocity.length(currentVelocity.length() + data.speed.acceleration());

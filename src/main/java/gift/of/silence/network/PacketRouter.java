@@ -40,6 +40,8 @@ class PacketRouter implements Runnable {
 
             String message = new String(receivePacket.getData());
             message = message.trim();
+            Logger.trace(String.format("<- %s", message));
+            
             switch (message) {
                 case "helm":
                     clientHandler = helm;
@@ -51,10 +53,10 @@ class PacketRouter implements Runnable {
                     clientHandler = debug;
                     break;
                 default:
-                    byte[] response = String.format("?-router: %s:%s not registered", ipAddress, clientPort).getBytes();
+                    byte[] response = String.format("%s:%s not registered", ipAddress, clientPort).getBytes();
                     DatagramPacket sendPacket = new DatagramPacket(response, response.length, ipAddress, clientPort);
                     try {
-                        Logger.trace(String.format("-> %s", new String(response)));
+                        Logger.warn(String.format("-> %s", new String(response)));
                         Network.socket.send(sendPacket);
                     } catch (IOException ex) {
                         Logger.error(String.format("%s", ex.getMessage()));

@@ -14,12 +14,12 @@ public class GiftOfSilence {
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {
         Configurator.currentConfig()
                 .formatPattern("{date:yyyy-MM-dd HH:mm:ss} [{thread}] {class}.{method}() {level}: {message}")
-                .level(Level.DEBUG)
+                .level(Level.TRACE)
                 .activate();
 
         Game game = new Game();
         Debug debug = new Debug();
-        Helm helm = new Helm();
+        Helm helm = new Helm(game);
         Network network = new Network(game, debug, helm);
 
         network.startPortListener();

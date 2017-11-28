@@ -2,6 +2,7 @@ package gift.of.silence.helm;
 
 import gift.of.silence.statemachine.StateMachine;
 import java.net.DatagramPacket;
+import org.pmw.tinylog.Logger;
 
 public class HelmControl {
 
@@ -16,28 +17,35 @@ public class HelmControl {
         String message = new String(packet.getData());
         message = message.trim();
 
+        String op = !message.contains(":") ? message : message.substring(0, message.indexOf(":"));
         String response;
-        switch (message.substring(message.indexOf(":"))) {
+        switch (op) {
             case "helm":
-                response = "o-helm: registered";
+                response = "registered";
+                Logger.info(response);
                 break;
             case "heading":
                 data.heading.target(Double.parseDouble(message));
-                response = String.format(" -helm: heading (target=%s, current=%s)", data.heading.target(), data.heading.current());
+                response = String.format("heading (target=%s, current=%s)", data.heading.target(), data.heading.current());
+                Logger.info(response);
                 break;
             case "speed":
                 data.speed.target(Double.parseDouble(message));
-                response = String.format(" -helm: speed (target=%s, current=%s)", data.speed.target(), data.speed.current());
+                response = String.format("speed (target=%s, current=%s)", data.speed.target(), data.speed.current());
+                Logger.info(response);
                 break;
             case "depth":
                 data.depth.target(Double.parseDouble(message));
-                response = String.format(" -helm: depth (target=%s, current=%s)", data.depth.target(), data.depth.current());
+                response = String.format("depth (target=%s, current=%s)", data.depth.target(), data.depth.current());
+                Logger.info(response);
                 break;
             case "disconnect":
-                response = String.format("x-helm: disconnecting");
+                response = String.format("disconnecting");
+                Logger.info(response);
                 break;
             default:
-                response = String.format("?-helm: unknown (%s)", message);
+                response = String.format("unknown message = %s", message);
+                Logger.warn(response);
         }
 
         return response.getBytes();

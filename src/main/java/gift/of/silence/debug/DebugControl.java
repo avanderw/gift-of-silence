@@ -37,13 +37,16 @@ class DebugControl {
                         break;
                 }
 
-                response = String.format(" -debug-control: log-level=%s", Logger.getLevel());
+                response = String.format("log-level=%s", Logger.getLevel());
+                Logger.debug(response);
                 break;
             case "debug":
-                response = String.format(" -debug-control: registered");
+                response = String.format("registered");
+                Logger.info(response);
                 break;
             default:
-                response = String.format("?-debug-control: message=%s", message);
+                response = String.format("unknown message = %s", message);
+                Logger.warn(response);
         }
 
         return response.getBytes();
