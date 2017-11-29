@@ -46,16 +46,19 @@ class PacketRouter implements Runnable {
 
             switch (message) {
                 case "helm":
-                    helm.add(ip, port);
+                    Network.connections.add(ip, port, Helm.class);
                     handler = helm;
                     break;
                 case "game":
+                    Network.connections.add(ip, port, Game.class);
                     handler = game;
                     break;
                 case "debug":
+                    Network.connections.add(ip, port, Debug.class);
                     handler = debug;
                     break;
                 case "intel":
+                    Network.connections.add(ip, port, Intel.class);
                     handler = intel;
                     break;
                 default:

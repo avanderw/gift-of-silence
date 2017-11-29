@@ -27,9 +27,6 @@ public class HelmSimulator {
         data.position.add(currentVelocity.clone().multiply(currentVelocity.length() / 1000 * delta));
         data.velocity.current(currentVelocity);
 
-        helm.clients.forEach((client) -> {
-            Network.send("update".getBytes(), client.ip, client.port);
-        });
-
+        Network.send(Helm.class, "update".getBytes());
     };
 }

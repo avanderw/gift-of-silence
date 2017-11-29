@@ -1,5 +1,6 @@
 package gift.of.silence.helm;
 
+import gift.of.silence.network.Network;
 import gift.of.silence.statemachine.StateMachine;
 import java.net.DatagramPacket;
 import org.pmw.tinylog.Logger;
@@ -40,6 +41,7 @@ public class HelmControl {
                 Logger.info(response);
                 break;
             case "disconnect":
+                Network.connections.remove(packet.getAddress(), packet.getPort());
                 response = String.format("disconnecting");
                 Logger.info(response);
                 break;

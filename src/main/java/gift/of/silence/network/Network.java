@@ -12,38 +12,15 @@ import java.net.SocketException;
 import org.pmw.tinylog.Logger;
 
 public class Network {
+    public static ConnectionHandler connections;
 
     static DatagramSocket socket;
 
-    private final Debug debug;
-    private final Game game;
-    private final Helm helm;
-    private final Intel intel;
-    private PortListener portListener;
-
-    public Network(Game game, Debug debug, Helm helm, Intel intel) {
-        Integer serverPort = 43397;
-        try {
-            socket = new DatagramSocket(serverPort);
-        } catch (SocketException ex) {
-            throw new RuntimeException(ex);
-        }
-        this.game = game;
-        this.helm = helm;
-        this.debug = debug;
-        this.intel = intel;
+    public static void send(Class system, byte[] bytes) {
+        ConnectionHandler.send(system, bytes);
     }
 
-    public void startPortListener() {
-        portListener = new PortListener(game, debug, helm, intel);
-        portListener.start();
-    }
-
-    public void stopPortListener() {
-        portListener.stop();
-    }
-
-    public static void send(byte[] bytes, InetAddress ip, Integer port) {
+    static void send(byte[] bytes, InetAddress ip, int port) {
         DatagramPacket sendPacket = new DatagramPacket(bytes, bytes.length, ip, port);
         try {
             Logger.trace(String.format("%s:%s -> %s", ip, port, new String(bytes)));
@@ -53,14 +30,38 @@ public class Network {
         }
     }
 
-    public static class Client {
+    private final Debug debug;
+    private final Game game;
+    private final Helm helm;
+    private final Intel intel;
+    private PortListener portListener;
+    private StatusMonitor statusMonitor;
 
-        public InetAddress ip;
-        public Integer port;
-
-        public Client(InetAddress ip, int port) {
-            this.ip = ip;
-            this.port = port;
+    public Network(Game game, Debug debug, Helm helm, Intel intel) {
+        Integer serverPort = 43397;
+        try {
+            socket = new DatagramSocket(serverPort);
+            connections = new ConnectionHandler();
+        } catch (SocketException ex) {
+            throw new RuntimeException(ex);
         }
+        this.game = game;
+        this.helm = helm;
+        this.debug = debug;
+        this.intel = intel;
+        
+    }
+
+    public void startPortListener() {
+        portListener = new PortListener(game, debug, helm, intel);
+        portListener.start();
+    }
+
+    public void startStatusMonitor() {
+        statusMonitor.start();
+    }
+
+    public void stopPortListener() {
+        portListener.stop();
     }
 }
