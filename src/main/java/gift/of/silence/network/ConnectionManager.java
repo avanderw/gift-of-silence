@@ -18,7 +18,7 @@ class ConnectionManager {
         cleanup = new Cleanup(clients);
         cleanup.start();
     }
-    
+
     void refresh(InetAddress ip, int port) {
         clients.stream().filter((client) -> client.ip == ip && client.port == port)
                 .findAny().get().last = System.currentTimeMillis();
@@ -64,6 +64,11 @@ class ConnectionManager {
             this.ip = ip;
             this.port = port;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            return true;
+        }
     }
 
     public class Cleanup implements Runnable {
@@ -71,7 +76,7 @@ class ConnectionManager {
         private volatile Thread thread;
         private final Long timeout = 300_000L;
         private final List<Client> clients;
-        
+
         Cleanup(List<Client> clients) {
             this.clients = clients;
         }

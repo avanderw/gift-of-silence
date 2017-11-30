@@ -70,6 +70,7 @@ class PacketRouter implements Runnable {
             handlers.get(ip).put(port, handler);
         }
         
+        Network.connectionManager.refresh(ip, port);
         byte[] response = handlers.get(ip).get(port).packetHandler(packet);
         Network.send(response, ip, port);
     }
