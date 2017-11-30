@@ -24,7 +24,7 @@ public class IntelControl {
                 Logger.info(response);
                 break;
             case "disconnect":
-                Network.connections.remove(packet.getAddress(), packet.getPort());
+                Network.remove(packet.getAddress(), packet.getPort());
                 response = String.format("disconnecting");
                 Logger.info(response);
                 break;

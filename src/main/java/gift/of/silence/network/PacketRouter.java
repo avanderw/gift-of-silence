@@ -46,19 +46,19 @@ class PacketRouter implements Runnable {
 
             switch (message) {
                 case "helm":
-                    Network.connections.add(ip, port, Helm.class);
+                    Network.connectionManager.add(ip, port, Helm.class);
                     handler = helm;
                     break;
                 case "game":
-                    Network.connections.add(ip, port, Game.class);
+                    Network.connectionManager.add(ip, port, Game.class);
                     handler = game;
                     break;
                 case "debug":
-                    Network.connections.add(ip, port, Debug.class);
+                    Network.connectionManager.add(ip, port, Debug.class);
                     handler = debug;
                     break;
                 case "intel":
-                    Network.connections.add(ip, port, Intel.class);
+                    Network.connectionManager.add(ip, port, Intel.class);
                     handler = intel;
                     break;
                 default:
@@ -69,7 +69,7 @@ class PacketRouter implements Runnable {
             }
             handlers.get(ip).put(port, handler);
         }
-
+        
         byte[] response = handlers.get(ip).get(port).packetHandler(packet);
         Network.send(response, ip, port);
     }

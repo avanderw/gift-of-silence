@@ -26,22 +26,22 @@ public class HelmControl {
                 Logger.info(String.format("%s:%s %s", packet.getAddress(), packet.getPort(), response));
                 break;
             case "heading":
-                data.heading.target(Double.parseDouble(message));
+                data.heading.target(Double.parseDouble(message.substring("heading:".length())));
                 response = String.format("heading (target=%s, current=%s)", data.heading.target(), data.heading.current());
                 Logger.info(response);
                 break;
             case "speed":
-                data.speed.target(Double.parseDouble(message));
+                data.speed.target(Double.parseDouble(message.substring("speed:".length())));
                 response = String.format("speed (target=%s, current=%s)", data.speed.target(), data.speed.current());
                 Logger.info(response);
                 break;
             case "depth":
-                data.depth.target(Double.parseDouble(message));
+                data.depth.target(Double.parseDouble(message.substring("depth:".length())));
                 response = String.format("depth (target=%s, current=%s)", data.depth.target(), data.depth.current());
                 Logger.info(response);
                 break;
             case "disconnect":
-                Network.connections.remove(packet.getAddress(), packet.getPort());
+                Network.remove(packet.getAddress(), packet.getPort());
                 response = String.format("disconnecting");
                 Logger.info(response);
                 break;

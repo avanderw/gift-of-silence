@@ -21,12 +21,18 @@ public class HelmSimulator {
     Consumer<Long> update = (delta) -> {
         Logger.trace("update");
         Vector2D currentVelocity = data.velocity.current();
-        currentVelocity.rotate(data.velocity.rotation());
-        currentVelocity.length(currentVelocity.length() + data.speed.acceleration());
+        if (currentVelocity.isZero() && data.speed.acceleration() != 0) {
+            currentVelocity.offsetPolar(data.velocity.rotation(), data.speed.acceleration());
+        } else {
+            currentVelocity.length(currentVelocity.length() + data.speed.acceleration());
+            currentVelocity.rotate(data.velocity.rotation());
+        }
 
         data.position.add(currentVelocity.clone().multiply(currentVelocity.length() / 1000 * delta));
         data.velocity.current(currentVelocity);
+        
+        data.depth.current(data.depth.current() + data.depth.climb()); 
 
-        Network.send(Helm.class, "update".getBytes());
+        Network.send(Helm.class, String.format("s:%s, h:%s, d:%s", data.speed.current, data.heading.current, data.depth.current).getBytes());
     };
 }

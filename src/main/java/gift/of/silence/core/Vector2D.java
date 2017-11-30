@@ -157,7 +157,7 @@ public class Vector2D {
 
     public Vector2D length(Double length) {
         if (isZero()) {
-            if (length == 0) {
+            if (Math.abs(length) < EPSILON) {
                 return this;
             } else {
                 throw new RuntimeException("don't have a direction to scale in");

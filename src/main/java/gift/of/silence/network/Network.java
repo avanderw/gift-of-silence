@@ -12,12 +12,19 @@ import java.net.SocketException;
 import org.pmw.tinylog.Logger;
 
 public class Network {
-    public static ConnectionHandler connections;
+
+    static ConnectionManager connectionManager;
 
     static DatagramSocket socket;
 
+    public static void remove(InetAddress ip, int port) {
+        connectionManager.remove(ip, port);
+    }
+
     public static void send(Class system, byte[] bytes) {
-        ConnectionHandler.send(system, bytes);
+        connectionManager.connections.get(system).forEach((systemConnection) -> {
+            send(bytes, systemConnection.ip, systemConnection.port);
+        });
     }
 
     static void send(byte[] bytes, InetAddress ip, int port) {
@@ -35,13 +42,12 @@ public class Network {
     private final Helm helm;
     private final Intel intel;
     private PortListener portListener;
-    private StatusMonitor statusMonitor;
 
     public Network(Game game, Debug debug, Helm helm, Intel intel) {
         Integer serverPort = 43397;
         try {
             socket = new DatagramSocket(serverPort);
-            connections = new ConnectionHandler();
+            connectionManager = new ConnectionManager();
         } catch (SocketException ex) {
             throw new RuntimeException(ex);
         }
@@ -49,19 +55,16 @@ public class Network {
         this.helm = helm;
         this.debug = debug;
         this.intel = intel;
-        
+
+        startPortListener();
     }
 
-    public void startPortListener() {
+    final void startPortListener() {
         portListener = new PortListener(game, debug, helm, intel);
         portListener.start();
     }
 
-    public void startStatusMonitor() {
-        statusMonitor.start();
-    }
-
-    public void stopPortListener() {
+    void stopPortListener() {
         portListener.stop();
     }
 }

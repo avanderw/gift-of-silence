@@ -6,7 +6,7 @@ public class HelmData {
 
     Heading heading = new Heading();
     Speed speed = new Speed(10D, .1D);
-    Depth depth = new Depth(100D);
+    Depth depth = new Depth(100D, 1D);
     Velocity velocity = new Velocity(2D / 180D * Math.PI);
     Vector2D position = new Vector2D();
 
@@ -108,12 +108,23 @@ public class HelmData {
         final Double test;
         final Double max;
         final Double crush;
+        final Double maxClimb;
 
-        Depth(Double design) {
+        Depth(Double design, Double maxClimb) {
             this.design = design;
             test = design * 1.1;
             max = design * 1.2;
             crush = design * 1.3;
+            
+            this.maxClimb = maxClimb;
+        }
+
+        Double climb() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        void current(Double depth) {
+            this.current = depth;
         }
 
         void target(Double target) {
@@ -126,7 +137,7 @@ public class HelmData {
 
         Double current() {
             return current;
-        }
+        }        
     }
 
 }

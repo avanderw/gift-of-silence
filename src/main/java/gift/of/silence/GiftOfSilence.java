@@ -21,10 +21,8 @@ public class GiftOfSilence {
         Game game = new Game();
         Debug debug = new Debug();
         Helm helm = new Helm();
-        Intel intel = new Intel();
+        Intel intel = new Intel(helm);
         
         Network network = new Network(game, debug, helm, intel);
-        network.startPortListener();
-        network.startStatusMonitor();
     }
 }
