@@ -12,7 +12,7 @@ import org.pmw.tinylog.Logger;
 
 class PacketRouter implements Runnable {
 
-    private static final Map<InetAddress, Map<Integer, IPacketHandler>> handlers = new HashMap();
+    static final Map<InetAddress, Map<Integer, IPacketHandler>> handlers = new HashMap();
     private final Debug debug;
     private final Game game;
     private final Helm helm;

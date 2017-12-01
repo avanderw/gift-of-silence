@@ -5,22 +5,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
 
 class ConnectionManager {
 
     List<Client> clients = new ArrayList();
-    Map<Class, List<Client>> connections = new HashMap();
+    Map<Class, List<Client>> connections = new HashMap(); 
     Cleanup cleanup;
 
     ConnectionManager() {
-        cleanup = new Cleanup(clients);
+        cleanup = new Cleanup(this);
         cleanup.start();
     }
 
     void refresh(InetAddress ip, int port) {
-        clients.stream().filter((client) -> client.ip == ip && client.port == port)
+        Logger.debug(String.format("refresh: %s:%s, clients:%s", ip, port, clients));
+        clients.stream().filter((client) -> client.ip.equals(ip) && client.port.equals(port))
                 .findAny().get().last = System.currentTimeMillis();
     }
 
@@ -49,7 +52,8 @@ class ConnectionManager {
             if (systemClients.contains(client)) {
                 systemClients.remove(client);
                 clients.remove(client);
-                Logger.info("%s:%s disconnected", client.ip, client.port);
+                PacketRouter.handlers.get(client.ip).remove(client.port);
+                Logger.info(String.format("%s:%s disconnected", client.ip, client.port));
             }
         });
     }
@@ -57,8 +61,8 @@ class ConnectionManager {
     class Client {
 
         InetAddress ip;
-        Integer port;
         Long last;
+        Integer port;
 
         Client(InetAddress ip, int port) {
             this.ip = ip;
@@ -67,18 +71,36 @@ class ConnectionManager {
 
         @Override
         public boolean equals(Object obj) {
-            return true;
+            if (obj instanceof Client) {
+                Client that = (Client) obj;
+                return this.ip.equals(that.ip) && this.port.equals(that.port);
+            }
+            return false;
         }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 79 * hash + Objects.hashCode(this.ip);
+            hash = 79 * hash + Objects.hashCode(this.port);
+            return hash;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s:%s", ip, port);
+        }
+
     }
 
     public class Cleanup implements Runnable {
 
         private volatile Thread thread;
         private final Long timeout = 300_000L;
-        private final List<Client> clients;
+        private final ConnectionManager connectionManager;
 
-        Cleanup(List<Client> clients) {
-            this.clients = clients;
+        Cleanup(ConnectionManager connectionManager) {
+            this.connectionManager = connectionManager;
         }
 
         @Override
@@ -87,11 +109,15 @@ class ConnectionManager {
             Logger.debug("started");
             while (Thread.currentThread() == thread) {
                 Logger.debug("cleanup");
-                clients.forEach((client) -> {
-                    if (System.currentTimeMillis() - client.last > timeout) {
-                        remove(client);
-                    }
-                });
+                List<Client> removeClients = clients.stream().filter(client -> System.currentTimeMillis() - client.last > timeout).collect(Collectors.toList());
+                if (!removeClients.isEmpty()) {
+                    Logger.info(String.format("disconnecting clients (%s) which timed-out", removeClients));
+                    removeClients.forEach(client -> {
+                        Network.send("you timed out".getBytes(), client.ip, client.port);
+                        connectionManager.remove(client);
+                    });
+                }
+
                 try {
                     TimeUnit.MILLISECONDS.sleep(timeout / 2);
                 } catch (InterruptedException ex) {

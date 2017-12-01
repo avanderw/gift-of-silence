@@ -22,9 +22,11 @@ public class Network {
     }
 
     public static void send(Class system, byte[] bytes) {
-        connectionManager.connections.get(system).forEach((systemConnection) -> {
-            send(bytes, systemConnection.ip, systemConnection.port);
-        });
+        if (connectionManager.connections.containsKey(system)) {
+            connectionManager.connections.get(system).forEach((systemConnection) -> {
+                send(bytes, systemConnection.ip, systemConnection.port);
+            });
+        }
     }
 
     static void send(byte[] bytes, InetAddress ip, int port) {

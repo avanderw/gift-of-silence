@@ -120,7 +120,12 @@ public class HelmData {
         }
 
         Double climb() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            Double delta = target - current;
+            Double climb = Math.min(maxClimb, Math.abs(delta));
+            if (delta < 0) {
+                climb = -climb;
+            }
+            return climb;
         }
 
         void current(Double depth) {
