@@ -8,6 +8,8 @@ public abstract class AState {
     List<Class> from = new ArrayList();
 
     protected abstract void enter();
+    
+    protected abstract void process();
 
     protected abstract void exit();
 

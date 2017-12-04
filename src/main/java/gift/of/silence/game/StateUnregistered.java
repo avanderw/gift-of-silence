@@ -14,4 +14,9 @@ class StateUnregistered extends AState {
         
     }
 
+    @Override
+    protected void process() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

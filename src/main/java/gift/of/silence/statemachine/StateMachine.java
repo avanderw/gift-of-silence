@@ -16,12 +16,20 @@ public class StateMachine {
             states.get(state.getClass()).from.addAll(Arrays.asList(fromStates));
         }
     }
+    public void initial(Class state) {
+        states.get(state).enter();
+        current = state;
+    }
+
+    public void process() {
+        states.get(current).process();
+    }
 
     public void transition(Class state) {
         if (current == null) {
             Logger.warn(String.format("initial state not set"));
         }
-        
+
         if (!states.containsKey(state)) {
             Logger.error(String.format("%s unknown", state.getSimpleName()));
             return;
@@ -29,19 +37,15 @@ public class StateMachine {
 
         if (states.get(state).from.contains(current)) {
             Logger.debug(String.format("%s -> %s", current.getSimpleName(), state.getSimpleName()));
-            
+
             states.get(current).exit();
             states.get(state).enter();
-            
+
             current = state;
         } else {
             Logger.warn(String.format("invalid %s -> %s", current.getSimpleName(), state.getSimpleName()));
         }
     }
 
-    public void initial(Class state) {
-        states.get(state).enter();
-        current = state;
-    }
 
 }
