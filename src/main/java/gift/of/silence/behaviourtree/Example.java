@@ -5,7 +5,6 @@
  */
 package gift.of.silence.behaviourtree;
 
-import gift.of.silence.behaviourtree.ABehaviourTree;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
@@ -29,7 +28,7 @@ public class Example {
             @Override
             public ABehaviourTree.Status process() {
                 Logger.debug("openDoor");
-                return ABehaviourTree.Status.Success;
+                return ABehaviourTree.Status.Failure;
             }
         };
         ABehaviourTree unlockDoor = new ABehaviourTree() {

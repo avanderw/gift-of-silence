@@ -17,16 +17,12 @@ public abstract class ABehaviourTree {
             if (child == null) {
                 throw new NullPointerException("child cannot be null");
             }
-            
+
             this.children.add(child);
         }
     }
 
     public abstract Status process();
-
-    public enum Status {
-        Running, Failure, Success
-    }
 
     /**
      * Fallback nodes are used to find and execute the first child that does not
@@ -71,7 +67,8 @@ public abstract class ABehaviourTree {
      */
     public static class Sequence extends ABehaviourTree {
 
-        public Sequence(){}
+        public Sequence() {
+        }
 
         public Sequence(ABehaviourTree... children) {
             super(children);
@@ -91,5 +88,42 @@ public abstract class ABehaviourTree {
 
             return Status.Success;
         }
+    }
+
+    /**
+     * Will repeat the wrapped task until that task fails.
+     *
+     * @author Andrew van der Westhuizen
+     */
+    public static class UntilFail extends ABehaviourTree {
+
+        public UntilFail() {
+        }
+
+        public UntilFail(ABehaviourTree child) {
+            super(child);
+        }
+
+        @Override
+        public Status process() {
+            if (children.size() != 1) {
+                throw new AssertionError(children);
+            }
+
+            Status status = children.get(0).process();
+            switch (status) {
+                case Running:
+                case Success:
+                    return Status.Running;
+                case Failure:
+                    return Status.Success;
+                default:
+                    throw new AssertionError(status.name());
+            }
+        }
+    }
+
+    public enum Status {
+        Running, Failure, Success
     }
 }
