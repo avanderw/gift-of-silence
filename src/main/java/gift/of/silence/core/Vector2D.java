@@ -42,9 +42,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    x = (Double) args[0];
-                    y = (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    x = ((Number) args[0]).doubleValue();
+                    y = ((Number) args[1]).doubleValue();
                 }
                 break;
             default:
@@ -63,9 +63,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    x += (Double) args[0];
-                    y += (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    x += ((Number) args[0]).doubleValue();
+                    y += ((Number) args[1]).doubleValue();
                 }
                 break;
             default:
@@ -84,9 +84,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    x -= (Double) args[0];
-                    y -= (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    x -= ((Number) args[0]).doubleValue();
+                    y -= ((Number) args[1]).doubleValue();
                 }
                 break;
             default:
@@ -105,9 +105,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    x *= (Double) args[0];
-                    y *= (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    x *= ((Number) args[0]).doubleValue();
+                    y *= ((Number) args[1]).doubleValue();
                 }
                 break;
             default:
@@ -126,9 +126,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    x /= (Double) args[0];
-                    y /= (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    x /= ((Number) args[0]).doubleValue();
+                    y /= ((Number) args[1]).doubleValue();
                 }
                 break;
             default:
@@ -182,9 +182,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    xd = x - (Double) args[0];
-                    yd = y - (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    xd = x - ((Number) args[0]).doubleValue();
+                    yd = y - ((Number) args[1]).doubleValue();
                 }
                 break;
             default:
@@ -204,9 +204,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    xd = x - (Double) args[0];
-                    yd = y - (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    xd = x - ((Number) args[0]).doubleValue();
+                    yd = y - ((Number) args[1]).doubleValue();
                 }
                 break;
             default:
@@ -221,14 +221,14 @@ public class Vector2D {
             case 1:
                 if (args[0] instanceof Vector2D) {
                     Vector2D that = (Vector2D) args[0];
-                    equal = equal && this.x == that.x;
-                    equal = equal && this.y == that.y;
+                    equal = equal && Math.abs(this.x - that.x) > EPSILON;
+                    equal = equal && Math.abs(this.y - that.y) > EPSILON;
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    equal = equal && x == (Double) args[0];
-                    equal = equal && y == (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    equal = equal && Math.abs(x - ((Number) args[0]).doubleValue()) > EPSILON;
+                    equal = equal && Math.abs(y - ((Number) args[1]).doubleValue()) > EPSILON;
                 }
                 break;
             default:
@@ -267,8 +267,8 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    dot = x * (Double) args[0] + y * (Double) args[1];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    dot = x * ((Number) args[0]).doubleValue() + y * ((Number) args[1]).doubleValue();
                 }
                 break;
             default:
@@ -287,8 +287,8 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    cross = x * (Double) args[1] - y * (Double) args[0];
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    cross = x * ((Number) args[1]).doubleValue() - y * ((Number) args[0]).doubleValue();
                 }
                 break;
             default:
@@ -326,8 +326,8 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    angle = new Vector2D((Double) args[0], (Double) args[1]).angle() - this.angle();
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    angle = new Vector2D(((Number) args[0]).doubleValue(), ((Number) args[1]).doubleValue()).angle() - this.angle();
                 }
                 break;
             default:
@@ -380,9 +380,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    x = x + t * ((Double) args[0] - x);
-                    y = y + t * ((Double) args[1] - y);
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    x = x + t * (((Number) args[0]).doubleValue() - x);
+                    y = y + t * (((Number) args[1]).doubleValue() - y);
 
                 }
                 break;
@@ -417,9 +417,9 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
-                    d = 2 * (x * (Double) args[0] + y * (Double) args[1]);
-                    subtract(d * (Double) args[0], d * (Double) args[1]);
+                if (args[0] instanceof Number && args[1] instanceof Number) {
+                    d = 2 * (x * ((Number) args[0]).doubleValue() + y * ((Number) args[1]).doubleValue());
+                    subtract(d * ((Number) args[0]).doubleValue(), d * ((Number) args[1]).doubleValue());
 
                 }
                 break;
@@ -441,7 +441,7 @@ public class Vector2D {
                 }
                 break;
             case 2:
-                if (args[0] instanceof Double && args[1] instanceof Double) {
+                if (args[0] instanceof Number && args[1] instanceof Number) {
                     projVector = new Vector2D(args[0], args[1]);
                     scalar = dot(projVector) / projVector.lengthSqr();
                 }

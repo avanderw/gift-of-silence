@@ -16,6 +16,7 @@ public class StateMachine {
             states.get(state.getClass()).from.addAll(Arrays.asList(fromStates));
         }
     }
+
     public void initial(Class state) {
         states.get(state).enter();
         current = state;
@@ -35,10 +36,12 @@ public class StateMachine {
             return;
         }
 
-        if (states.get(state).from.contains(current)) {
-            Logger.debug(String.format("%s -> %s", current.getSimpleName(), state.getSimpleName()));
+        if (states.get(state).from.contains(current) || current == null) {
+            Logger.debug(String.format("%s -> %s", current == null ? "null" : current.getSimpleName(), state.getSimpleName()));
 
-            states.get(current).exit();
+            if (current != null) {
+                states.get(current).exit();
+            }
             states.get(state).enter();
 
             current = state;
@@ -46,6 +49,5 @@ public class StateMachine {
             Logger.warn(String.format("invalid %s -> %s", current.getSimpleName(), state.getSimpleName()));
         }
     }
-
 
 }
