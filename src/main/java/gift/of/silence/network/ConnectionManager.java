@@ -13,7 +13,7 @@ import org.pmw.tinylog.Logger;
 class ConnectionManager {
 
     List<Client> clients = new ArrayList();
-    Map<Class, List<Client>> connections = new HashMap(); 
+    Map<Class, List<Client>> connections = new HashMap();
     Cleanup cleanup;
 
     ConnectionManager() {
@@ -48,14 +48,22 @@ class ConnectionManager {
     }
 
     void remove(Client client) {
-        connections.values().forEach(systemClients -> {
+        final List<Class> clean = new ArrayList();
+        connections.keySet().forEach((key) -> {
+            List<Client> systemClients = connections.get(key);
             if (systemClients.contains(client)) {
                 systemClients.remove(client);
                 clients.remove(client);
                 PacketRouter.handlers.get(client.ip).remove(client.port);
                 Logger.info(String.format("%s:%s disconnected", client.ip, client.port));
+                if (systemClients.isEmpty()) {
+                    Logger.debug(String.format("%s has no handlers", key));
+                    clean.add(key);
+                }
             }
         });
+
+        clean.forEach(key -> connections.remove(key));
     }
 
     class Client {

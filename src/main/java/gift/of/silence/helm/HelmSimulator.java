@@ -22,7 +22,7 @@ public class HelmSimulator {
         Logger.trace("update");
         Vector2D currentVelocity = data.velocity.current();
         if (currentVelocity.isZero() && data.speed.acceleration() != 0) {
-            currentVelocity.offsetPolar(data.velocity.rotation(), data.speed.acceleration());
+            currentVelocity.offsetPolar(data.speed.acceleration(), data.velocity.rotation());
         } else {
             currentVelocity.length(currentVelocity.length() + data.speed.acceleration());
             currentVelocity.rotate(data.velocity.rotation());

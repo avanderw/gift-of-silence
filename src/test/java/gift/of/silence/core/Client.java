@@ -33,7 +33,7 @@ public class Client implements Runnable {
 
             Logger.info("input ready");
             String request = null;
-            while (request == null || !request.equals("disconnect")) {
+            while (request == null || !request.equals("exit")) {
                 try {
                     request = console.readLine();
                     byte[] sendData = request.getBytes();
@@ -57,9 +57,9 @@ public class Client implements Runnable {
             DatagramPacket receivePacket = new DatagramPacket(new byte[508], 508);
             try {
                 socket.receive(receivePacket);
-                Logger.info(String.format("<- %s", new String(receivePacket.getData())));
+                Logger.info(String.format("<- %s", new String(receivePacket.getData()).trim()));
             } catch (IOException ex) {
-                
+                Logger.error(ex);
             }
         }        
         Logger.info("stopped");

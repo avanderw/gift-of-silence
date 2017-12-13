@@ -17,6 +17,10 @@ public class Network {
 
     static DatagramSocket socket;
 
+    public static String connections() {
+        return connectionManager.connections.keySet().toString();
+    }
+    
     public static void remove(InetAddress ip, int port) {
         connectionManager.remove(ip, port);
     }

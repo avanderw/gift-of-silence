@@ -33,16 +33,16 @@ class PacketRouter implements Runnable {
         InetAddress ip = packet.getAddress();
         int port = packet.getPort();
 
+        String message = new String(packet.getData());
+        message = message.trim();
+        Logger.trace(String.format("<- %s", message));
+
         if (!handlers.containsKey(ip)) {
             handlers.put(ip, new HashMap());
         }
 
         if (!handlers.get(ip).containsKey(port)) {
-            IPacketHandler handler;
-
-            String message = new String(packet.getData());
-            message = message.trim();
-            Logger.trace(String.format("<- %s", message));
+            IPacketHandler handler = null;
 
             switch (message) {
                 case "helm":
@@ -62,16 +62,20 @@ class PacketRouter implements Runnable {
                     handler = intel;
                     break;
                 default:
-                    byte[] response = String.format("%s:%s not registered", ip, port).getBytes();
-                    Network.send(response, ip, port);
+                    Network.send(String.format("%s:%s not registered", ip, port).getBytes(), ip, port);
                     return;
 
             }
             handlers.get(ip).put(port, handler);
         }
-        
+
         Network.connectionManager.refresh(ip, port);
         byte[] response = handlers.get(ip).get(port).packetHandler(packet);
+        switch (message) {
+            case "disconnect":
+                Network.connectionManager.remove(ip, port);
+                break;
+        }
         Network.send(response, ip, port);
     }
 }

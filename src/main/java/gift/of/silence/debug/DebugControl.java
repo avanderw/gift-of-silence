@@ -1,5 +1,6 @@
 package gift.of.silence.debug;
 
+import gift.of.silence.network.Network;
 import java.net.DatagramPacket;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
@@ -14,8 +15,8 @@ class DebugControl {
         String op = !message.contains(":") ? message : message.substring(0, message.indexOf(":"));
         String response;
         switch (op) {
-            case "level":
-                switch (message.substring("level:".length())) {
+            case "log":
+                switch (message.substring("log:".length())) {
                     case "trace":
                         Configurator.currentConfig().level(Level.TRACE).activate();
                         break;
@@ -44,8 +45,16 @@ class DebugControl {
                 response = String.format("registered");
                 Logger.info(String.format("%s:%s %s", packet.getAddress(), packet.getPort(), response));
                 break;
+            case "connected":
+            case "connections":
+                response = Network.connections();
+                Logger.info(String.format("connected=%s", response));
+                break;
+            case "disconnect":
+                response = String.format("disconnecting");
+                break;
             default:
-                response = String.format("unknown message = %s", message);
+                response = String.format("unknown=%s, valid=[log:level, debug, disconnect, connected, connections]", message);
                 Logger.warn(response);
         }
 

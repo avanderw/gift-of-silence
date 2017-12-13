@@ -49,8 +49,8 @@ public class HelmData {
 
     class Heading {
 
-        Double target = 270D / 180D * Math.PI;
-        Double current = 270D / 180D * Math.PI;
+        Double target = 0D;
+        Double current = 0D;
 
         void target(Double target) {
             this.target = target;
