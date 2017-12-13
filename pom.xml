@@ -4,41 +4,14 @@
     <groupId>net.avdw</groupId>
     <artifactId>gift-of-silence</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.1</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.tinylog</groupId>
-            <artifactId>tinylog</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.avdw</groupId>
-            <artifactId>vector</artifactId>
-            <version>1.0.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>net.avdw</groupId>
-            <artifactId>statemachine</artifactId>
-            <version>1.0.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>net.avdw</groupId>
-            <artifactId>eventmanager</artifactId>
-            <version>1.0.0</version>
-            <type>jar</type>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>gift-of-silence.client-java</module>
+        <module>gift-of-silence.server</module>
+    </modules>
 </project>
