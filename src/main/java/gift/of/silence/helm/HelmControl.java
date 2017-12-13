@@ -1,7 +1,7 @@
 package gift.of.silence.helm;
 
 import gift.of.silence.network.Network;
-import gift.of.silence.statemachine.StateMachine;
+import net.avdw.statemachine.StateMachine;
 import java.net.DatagramPacket;
 import org.pmw.tinylog.Logger;
 

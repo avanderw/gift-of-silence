@@ -1,9 +1,9 @@
 package gift.of.silence.helm;
 
 import gift.of.silence.game.Game;
-import gift.of.silence.core.Vector2D;
 import gift.of.silence.network.Network;
 import java.util.function.Consumer;
+import net.avdw.vector.Vector2D;
 import org.pmw.tinylog.Logger;
 
 public class HelmSimulator {

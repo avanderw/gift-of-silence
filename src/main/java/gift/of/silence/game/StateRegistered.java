@@ -1,19 +1,29 @@
 package gift.of.silence.game;
 
-import gift.of.silence.statemachine.AState;
+import java.util.List;
+import net.avdw.statemachine.StateMachine.AState;
 
-class StateRegistered extends AState {
+class StateRegistered implements AState {
 
     @Override
-    protected void enter() {
+    public List<Class> from() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    protected void exit() {
+    public void enter() {
     }
 
     @Override
-    protected void process() {
+    public void from(List<Class> asList) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    @Override
+    public void exit() {
+    }
+
+    @Override
+    public void process() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

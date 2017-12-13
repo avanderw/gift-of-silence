@@ -1,6 +1,6 @@
 package gift.of.silence.helm;
 
-import gift.of.silence.core.Vector2D;
+import net.avdw.vector.Vector2D;
 
 public class HelmData {
 

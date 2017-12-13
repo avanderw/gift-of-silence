@@ -1,6 +1,6 @@
 package gift.of.silence.game;
 
-import gift.of.silence.statemachine.StateMachine;
+import net.avdw.statemachine.StateMachine;
 import java.net.DatagramPacket;
 import org.pmw.tinylog.Logger;
 
