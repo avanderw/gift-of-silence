@@ -1,6 +1,6 @@
 package gift.of.silence.game;
 
-import gift.of.silence.eventmanager.EventManager;
+import net.avdw.eventmanager.EventManager;
 import gift.of.silence.network.IPacketHandler;
 import java.net.DatagramPacket;
 
