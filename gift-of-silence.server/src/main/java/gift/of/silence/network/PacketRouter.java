@@ -1,8 +1,7 @@
 package gift.of.silence.network;
 
-import gift.of.silence.lib.network.IPacketHandler;
 import gift.of.silence.debug.Debug;
-import gift.of.silence.game.Game;
+import gift.of.silence.server.control.Control;
 import gift.of.silence.helm.Helm;
 import gift.of.silence.intel.Intel;
 import java.net.DatagramPacket;
@@ -10,17 +9,18 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import org.pmw.tinylog.Logger;
+import gift.of.silence.lib.network.APacketHandler;
 
 class PacketRouter implements Runnable {
 
-    static final Map<InetAddress, Map<Integer, IPacketHandler>> handlers = new HashMap();
+    static final Map<InetAddress, Map<Integer, APacketHandler>> handlers = new HashMap();
     private final Debug debug;
-    private final Game game;
+    private final Control game;
     private final Helm helm;
     private final Intel intel;
     private final DatagramPacket packet;
 
-    PacketRouter(DatagramPacket packet, Game game, Debug debug, Helm helm, Intel intel) {
+    PacketRouter(DatagramPacket packet, Control game, Debug debug, Helm helm, Intel intel) {
         this.packet = packet;
         this.game = game;
         this.helm = helm;
@@ -43,7 +43,7 @@ class PacketRouter implements Runnable {
         }
 
         if (!handlers.get(ip).containsKey(port)) {
-            IPacketHandler handler = null;
+            APacketHandler handler = null;
 
             switch (message) {
                 case "helm":
@@ -51,7 +51,7 @@ class PacketRouter implements Runnable {
                     handler = helm;
                     break;
                 case "game":
-                    Network.connectionManager.add(ip, port, Game.class);
+                    Network.connectionManager.add(ip, port, Control.class);
                     handler = game;
                     break;
                 case "debug":

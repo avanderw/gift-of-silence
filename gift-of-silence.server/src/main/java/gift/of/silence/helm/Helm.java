@@ -1,10 +1,10 @@
 package gift.of.silence.helm;
 
 import net.avdw.eventmanager.EventManager;
-import gift.of.silence.lib.network.IPacketHandler;
 import java.net.DatagramPacket;
+import gift.of.silence.lib.network.APacketHandler;
 
-public class Helm implements IPacketHandler {
+public class Helm implements APacketHandler {
 
     final HelmData data = new HelmData();
     final HelmControl control = new HelmControl(data);

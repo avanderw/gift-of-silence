@@ -1,5 +1,6 @@
 package gift.of.silence.client.intel;
 
+import java.awt.Canvas;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -24,7 +25,7 @@ public class Intel {
             }
         });
 
-        SonarCanvas sonarCanvas = new SonarCanvas();
+        Canvas sonarCanvas = new Canvas();
         frame.add(sonarCanvas);
         sonarCanvas.createBufferStrategy(4);
     }

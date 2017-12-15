@@ -1,21 +1,25 @@
-package gift.of.silence.game;
+package gift.of.silence.server.control;
 
 import java.util.ArrayList;
 import java.util.List;
 import net.avdw.statemachine.StateMachine.AState;
 
-class StateUnregistered implements AState {
+class StatePaused implements AState {
 
+    private final Control game;
     List<Class> from = new ArrayList();
 
-    @Override
-    public List<Class> from() {
-        return this.from;
+    StatePaused(Control game) {
+        this.game = game;
     }
 
     @Override
     public void enter() {
+        game.loop.stop();
+    }
 
+    @Override
+    public void exit() {
     }
 
     @Override
@@ -24,8 +28,8 @@ class StateUnregistered implements AState {
     }
 
     @Override
-    public void exit() {
-
+    public List<Class> from() {
+        return from;
     }
 
     @Override

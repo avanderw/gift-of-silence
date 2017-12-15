@@ -1,6 +1,6 @@
 package gift.of.silence.helm;
 
-import gift.of.silence.game.Game;
+import gift.of.silence.server.control.Control;
 import gift.of.silence.network.Network;
 import java.util.function.Consumer;
 import net.avdw.vector.Vector2D;
@@ -15,7 +15,7 @@ public class HelmSimulator {
         this.data = data;
         this.helm = helm;
 
-        Game.events.subscribe(Game.Event.UPDATE, update);
+        Control.events.subscribe(Control.Event.UPDATE, update);
     }
 
     Consumer<Long> update = (delta) -> {

@@ -1,20 +1,19 @@
-package gift.of.silence.game;
+package gift.of.silence.server.control;
 
 import java.util.ArrayList;
 import java.util.List;
 import net.avdw.statemachine.StateMachine.AState;
 
-class StateRegistered implements AState {
+class StateStopped implements AState {
 
     List<Class> from = new ArrayList();
 
     @Override
-    public List<Class> from() {
-        return from;
+    public void enter() {
     }
 
     @Override
-    public void enter() {
+    public void exit() {
     }
 
     @Override
@@ -23,12 +22,12 @@ class StateRegistered implements AState {
     }
 
     @Override
-    public void exit() {
+    public List<Class> from() {
+        return from;
     }
 
     @Override
     public void process() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

@@ -2,7 +2,7 @@ package gift.of.silence.lib.network;
 
 import java.net.DatagramPacket;
 
-public interface IPacketHandler {
+public interface APacketHandler {
 
     byte[] handle(DatagramPacket message);
 

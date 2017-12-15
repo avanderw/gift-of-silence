@@ -1,7 +1,7 @@
 package gift.of.silence;
 
 import gift.of.silence.debug.Debug;
-import gift.of.silence.game.Game;
+import gift.of.silence.server.control.Control;
 import gift.of.silence.helm.Helm;
 import gift.of.silence.intel.Intel;
 import gift.of.silence.network.Network;
@@ -18,7 +18,7 @@ public class Server {
                 .level(Level.TRACE)
                 .activate();
 
-        Game game = new Game();
+        Control game = new Control();
         Debug debug = new Debug();
         Helm helm = new Helm();
         Intel intel = new Intel(helm);

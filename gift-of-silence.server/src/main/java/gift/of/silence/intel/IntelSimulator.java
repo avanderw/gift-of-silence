@@ -1,6 +1,6 @@
 package gift.of.silence.intel;
 
-import gift.of.silence.game.Game;
+import gift.of.silence.server.control.Control;
 import gift.of.silence.helm.Helm;
 import gift.of.silence.network.Network;
 import java.util.function.Consumer;
@@ -15,7 +15,7 @@ public class IntelSimulator {
     IntelSimulator(Intel intel, Helm helm, IntelData data) {
         this.intel = intel;
 
-        Game.events.subscribe(Game.Event.UPDATE, update);
+        Control.events.subscribe(Control.Event.UPDATE, update);
         this.helm = helm;
         this.data = data;
     }

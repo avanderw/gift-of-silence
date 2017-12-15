@@ -3,19 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gift.of.silence.client.game;
+package gift.of.silence.client.control;
 
 /**
  *
  * @author CP318674
  */
-public class GamePanel extends javax.swing.JPanel {
+public class Gui extends javax.swing.JPanel {
 
-    private final Game game;
+    private final Control game;
 
-    public GamePanel(Game game) {
+    public Gui(Control game) {
         initComponents();
         this.game = game;
+
+        game.events.subscribe(Control.Event.PACKET_RECEIVED, data->{
+            statusLabel.setText(data.toString());
+        });
     }
 
     /**
@@ -27,42 +31,69 @@ public class GamePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jToolBar1 = new javax.swing.JToolBar();
         connect = new javax.swing.JButton();
         playButton = new javax.swing.JButton();
         pauseButton = new javax.swing.JButton();
         disconnect = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        statusLabel = new javax.swing.JLabel();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
 
         connect.setText("connect");
+        connect.setFocusable(false);
+        connect.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        connect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         connect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectActionPerformed(evt);
             }
         });
-        add(connect);
+        jToolBar1.add(connect);
 
         playButton.setText("play");
+        playButton.setFocusable(false);
+        playButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        playButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         playButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 playButtonActionPerformed(evt);
             }
         });
-        add(playButton);
+        jToolBar1.add(playButton);
 
         pauseButton.setText("pause");
+        pauseButton.setFocusable(false);
+        pauseButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        pauseButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         pauseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pauseButtonActionPerformed(evt);
             }
         });
-        add(pauseButton);
+        jToolBar1.add(pauseButton);
 
         disconnect.setText("disconnect");
+        disconnect.setFocusable(false);
+        disconnect.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        disconnect.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         disconnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 disconnectActionPerformed(evt);
             }
         });
-        add(disconnect);
+        jToolBar1.add(disconnect);
+
+        add(jToolBar1, java.awt.BorderLayout.NORTH);
+
+        statusLabel.setText("status");
+        jPanel1.add(statusLabel);
+
+        add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
@@ -86,7 +117,10 @@ public class GamePanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton connect;
     private javax.swing.JButton disconnect;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton pauseButton;
     private javax.swing.JButton playButton;
+    private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 }

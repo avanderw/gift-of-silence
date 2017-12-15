@@ -1,7 +1,7 @@
 package gift.of.silence.network;
 
 import gift.of.silence.debug.Debug;
-import gift.of.silence.game.Game;
+import gift.of.silence.server.control.Control;
 import gift.of.silence.helm.Helm;
 import gift.of.silence.intel.Intel;
 import java.io.IOException;
@@ -17,12 +17,12 @@ public class PortListener implements Runnable {
 
     private final Map<InetAddress, Map<Integer, PacketRouter>> connected = new HashMap();
     private final Debug debug;
-    private final Game game;
+    private final Control game;
     private final Helm helm;
     private final Intel intel;
     private volatile Thread thread;
 
-    PortListener(Game game, Debug debug, Helm helm, Intel intel) {
+    PortListener(Control game, Debug debug, Helm helm, Intel intel) {
         this.game = game;
         this.helm = helm;
         this.debug = debug;

@@ -1,6 +1,5 @@
 package gift.of.silence.client.network;
 
-import gift.of.silence.lib.network.IPacketHandler;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -8,17 +7,18 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import org.pmw.tinylog.Logger;
+import gift.of.silence.lib.network.APacketHandler;
 
 public class Network {
 
     final String server;
-    final IPacketHandler packetHandler;
+    final APacketHandler packetHandler;
     final String id;
 
     DatagramSocket socket;
     InetAddress ipAddress;
 
-    public Network(String id, String server, IPacketHandler packetHandler) {
+    public Network(String id, String server, APacketHandler packetHandler) {
         this.id = id;
         this.server = server;
         this.packetHandler = packetHandler;
@@ -56,9 +56,9 @@ public class Network {
 
     class Listener implements Runnable {
 
-        IPacketHandler packetHandler;
+        APacketHandler packetHandler;
 
-        Listener(IPacketHandler packetHandler) {
+        Listener(APacketHandler packetHandler) {
             this.packetHandler = packetHandler;
         }
 

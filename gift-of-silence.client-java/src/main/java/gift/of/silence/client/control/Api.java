@@ -1,4 +1,4 @@
-package gift.of.silence.client.game;
+package gift.of.silence.client.control;
 
 import gift.of.silence.api.AGameApi;
 import gift.of.silence.client.network.Network;

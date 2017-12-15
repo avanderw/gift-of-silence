@@ -1,7 +1,7 @@
 package gift.of.silence.network;
 
 import gift.of.silence.debug.Debug;
-import gift.of.silence.game.Game;
+import gift.of.silence.server.control.Control;
 import gift.of.silence.helm.Helm;
 import gift.of.silence.intel.Intel;
 import java.io.IOException;
@@ -44,12 +44,12 @@ public class Network {
     }
 
     private final Debug debug;
-    private final Game game;
+    private final Control game;
     private final Helm helm;
     private final Intel intel;
     private PortListener portListener;
 
-    public Network(Game game, Debug debug, Helm helm, Intel intel) {
+    public Network(Control game, Debug debug, Helm helm, Intel intel) {
         Integer serverPort = 43397;
         try {
             socket = new DatagramSocket(serverPort);

@@ -1,23 +1,27 @@
-package gift.of.silence.client.game;
+package gift.of.silence.client.control;
 
 import gift.of.silence.client.network.Network;
-import gift.of.silence.lib.network.IPacketHandler;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.DatagramPacket;
+import net.avdw.eventmanager.EventManager;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
-import org.pmw.tinylog.Logger;
 
-public class Game {
+public class Control {
 
     final Api api;
     final Network network;
+    final EventManager events;
 
-    Game() {
-        network = new Network("game", "localhost", new PacketHandler());
+    Control() {
+        network = new Network("game", "localhost", new PacketHandler(this));
         api = new Api(network);
+        events = new EventManager(Event.PACKET_RECEIVED);
+    }
+
+    public static final class Event {
+        public static final String PACKET_RECEIVED = "packet-received";
     }
 
     public static void main(String[] args) {
@@ -26,8 +30,8 @@ public class Game {
                 .level(Level.TRACE)
                 .activate();
 
-        Game game = new Game();
-        GamePanel gamePanel = new GamePanel(game);
+        Control game = new Control();
+        Gui gamePanel = new Gui(game);
 
         Frame frame = new Frame("Game");
         frame.addWindowListener(new WindowAdapter() {

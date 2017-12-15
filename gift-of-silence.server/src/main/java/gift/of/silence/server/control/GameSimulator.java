@@ -1,4 +1,4 @@
-package gift.of.silence.game;
+package gift.of.silence.server.control;
 
 import java.util.concurrent.TimeUnit;
 import org.pmw.tinylog.Logger;
@@ -6,11 +6,11 @@ import org.pmw.tinylog.Logger;
 public class GameSimulator implements Runnable {
 
     private final Long fps;
-    private final Game game;
+    private final Control game;
 
     private volatile Thread thread;
 
-    GameSimulator(Long fps, Game game) {
+    GameSimulator(Long fps, Control game) {
         this.fps = fps;
         this.game = game;
     }
@@ -24,7 +24,7 @@ public class GameSimulator implements Runnable {
             long start = System.currentTimeMillis();
             long next = start + timeElapsed;
 
-            Game.events.fire(Game.Event.UPDATE, timeElapsed);
+            Control.events.fire(Control.Event.UPDATE, timeElapsed);
 
             long end = System.currentTimeMillis();
             if (next < end) {

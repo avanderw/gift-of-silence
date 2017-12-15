@@ -1,9 +1,9 @@
 package gift.of.silence.debug;
 
-import gift.of.silence.lib.network.IPacketHandler;
 import java.net.DatagramPacket;
+import gift.of.silence.lib.network.APacketHandler;
 
-public class Debug implements IPacketHandler {
+public class Debug implements APacketHandler {
 
     DebugControl control = new DebugControl();
 
