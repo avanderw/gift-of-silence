@@ -50,7 +50,9 @@ public class Network {
     }
 
     public void close() {
-        socket.close();
+        if (socket != null && !socket.isClosed()) {
+            socket.close();
+        }
         Logger.info(String.format("%s network closed", id));
     }
 
