@@ -1,4 +1,4 @@
-package gift.of.silence.debug;
+package gift.of.silence.server.debug;
 
 import gift.of.silence.network.Network;
 import java.net.DatagramPacket;

@@ -1,6 +1,6 @@
 package gift.of.silence;
 
-import gift.of.silence.debug.Debug;
+import gift.of.silence.server.debug.Debug;
 import gift.of.silence.server.control.Control;
 import gift.of.silence.helm.Helm;
 import gift.of.silence.intel.Intel;
