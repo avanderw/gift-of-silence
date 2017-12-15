@@ -20,5 +20,17 @@
             <version>1.0.0</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>gift.of.silence</groupId>
+            <artifactId>gift-of-silence.lib</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>gift.of.silence</groupId>
+            <artifactId>gift-of-silence.api</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>

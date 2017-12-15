@@ -13,5 +13,7 @@
     <modules>
         <module>gift-of-silence.client-java</module>
         <module>gift-of-silence.server</module>
+        <module>gift-of-silence.lib</module>
+        <module>gift-of-silence.api</module>
     </modules>
 </project>

@@ -1,5 +1,6 @@
 package gift.of.silence.network;
 
+import gift.of.silence.lib.network.IPacketHandler;
 import gift.of.silence.debug.Debug;
 import gift.of.silence.game.Game;
 import gift.of.silence.helm.Helm;
@@ -70,7 +71,7 @@ class PacketRouter implements Runnable {
         }
 
         Network.connectionManager.refresh(ip, port);
-        byte[] response = handlers.get(ip).get(port).packetHandler(packet);
+        byte[] response = handlers.get(ip).get(port).handle(packet);
         switch (message) {
             case "disconnect":
                 Network.connectionManager.remove(ip, port);

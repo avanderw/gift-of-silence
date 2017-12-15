@@ -1,7 +1,7 @@
 package gift.of.silence.helm;
 
 import net.avdw.eventmanager.EventManager;
-import gift.of.silence.network.IPacketHandler;
+import gift.of.silence.lib.network.IPacketHandler;
 import java.net.DatagramPacket;
 
 public class Helm implements IPacketHandler {
@@ -16,7 +16,7 @@ public class Helm implements IPacketHandler {
     }
 
     @Override
-    public byte[] packetHandler(DatagramPacket packet) {
+    public byte[] handle(DatagramPacket packet) {
 
         return control.packetHandler(packet);
     }

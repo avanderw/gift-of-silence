@@ -1,7 +1,7 @@
 package gift.of.silence.game;
 
 import net.avdw.eventmanager.EventManager;
-import gift.of.silence.network.IPacketHandler;
+import gift.of.silence.lib.network.IPacketHandler;
 import java.net.DatagramPacket;
 
 public class Game implements IPacketHandler {
@@ -12,7 +12,7 @@ public class Game implements IPacketHandler {
     GameControl control = new GameControl(this);
 
     @Override
-    public byte[] packetHandler(DatagramPacket packet) {
+    public byte[] handle(DatagramPacket packet) {
 
         return control.packetHandler(packet);
     }

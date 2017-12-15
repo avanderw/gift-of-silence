@@ -1,7 +1,7 @@
 package gift.of.silence.intel;
 
 import gift.of.silence.helm.Helm;
-import gift.of.silence.network.IPacketHandler;
+import gift.of.silence.lib.network.IPacketHandler;
 import java.net.DatagramPacket;
 
 public class Intel implements IPacketHandler {
@@ -18,7 +18,7 @@ public class Intel implements IPacketHandler {
     }
 
     @Override
-    public byte[] packetHandler(DatagramPacket packet) {
+    public byte[] handle(DatagramPacket packet) {
 
         return control.packetHandler(packet);
     }
