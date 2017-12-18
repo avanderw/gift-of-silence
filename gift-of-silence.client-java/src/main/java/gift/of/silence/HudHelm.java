@@ -137,19 +137,21 @@ public class HudHelm {
         });
     }
 
-    static class State {
+    static abstract class State implements StateMachine.AState {
 
         List<Class> from = new ArrayList();
 
+        @Override
         public void from(List<Class> states) {
             from.addAll(states);
         }
 
+        @Override
         public List<Class> from() {
             return from;
         }
 
-        static class AdjustingHeading extends State implements StateMachine.AState {
+        static class AdjustingHeading extends State {
 
             @Override
             public void enter() {
